@@ -1,256 +1,311 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ReCosecha Santa Anita</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReCosecha — Alimentos que siguen contando historias</title>
 <style>
-:root{--v:#1e4d36;--v2:#2a6b4a;--n:#f58220;--c:#fff8e6;--bg:#eef4ef;--t:#16241c;--g:#667;--r:#c0392b}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--t);font:15px/1.4 "Trebuchet MS",Verdana,sans-serif;padding-bottom:84px}
-.app{max-width:480px;margin:0 auto}
-header{background:var(--v);color:#fff;padding:18px 16px 14px;border-radius:0 0 22px 22px}
-header h1{margin:0;font-size:21px}header p{margin:2px 0 10px;opacity:.8;font-size:13px}
-.pill{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:12px}
-.roles{display:flex;gap:6px;margin-top:10px}
-.roles button{flex:1;border:1px solid rgba(255,255,255,.4);background:none;color:#fff;border-radius:10px;padding:7px;font:inherit;font-size:13px;cursor:pointer}
-.roles button.on{background:#fff;color:var(--v);font-weight:700}
-main{padding:14px}
-.card{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 6px rgba(20,60,40,.08)}
-h2{margin:0 0 8px;font-size:17px;color:var(--v)}
-.sub{color:var(--g);font-size:13px;margin:0 0 10px}
-.btn{display:block;width:100%;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:700;cursor:pointer;background:var(--v2);color:#fff}
-.btn:disabled{opacity:.45;cursor:default}.btn.o{background:var(--n)}.btn.l{background:#e4f3ea;color:var(--v)}
-.btn.s{width:auto;display:inline-block;padding:9px 14px;background:var(--v)}
-.drop{border:2px dashed #b9cfc0;border-radius:14px;padding:12px;text-align:center;margin-bottom:10px}
-.drop img{max-width:100%;max-height:200px;border-radius:10px;display:block;margin:0 auto 8px}
-.err{background:#fde8e6;color:var(--r);border-radius:10px;padding:9px 11px;margin-top:10px;font-size:13px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.k{border-radius:14px;padding:11px;border:1px solid}
-.k small{display:block;font-size:11px;font-weight:700;color:#445}.k b{display:block;font-size:19px;margin:3px 0}.k span{font-size:12px;color:var(--g)}
-.k1{background:#eafbf2;border-color:#bfeacf}.k2{background:#edf4ff;border-color:#c5d8f5}.k3{background:#eafaf8;border-color:#b9e8e2}.k4{background:#fff8e1;border-color:#f1dc9a}
-.row{display:flex;gap:10px;align-items:center;justify-content:space-between}
-.lot{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #eef1ee}.lot:first-of-type{border-top:0}
-.em{font-size:30px;background:#eafbf2;border-radius:14px;width:52px;height:52px;display:grid;place-items:center;flex:none}
-.tag{font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px;display:inline-block}
-.t-venta{background:#d6f3df;color:#17673a}.t-donacion{background:#fff0c9;color:#8a5a00}.t-compost{background:#eadfd2;color:#6b4423}.t-off{background:#fde0dd;color:#a3271a}
-.chips{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.chips button{border:1px solid #cdd8d0;background:#fff;border-radius:20px;padding:6px 13px;font:inherit;font-size:13px;cursor:pointer}
-.chips button.on{background:var(--v);color:#fff;border-color:var(--v)}
-.hero{background:var(--n);color:#fff;border-radius:18px;padding:16px;margin-bottom:14px}
-.hero h2{color:#fff}.hero .grid{grid-template-columns:repeat(3,1fr)}.hero .k{background:rgba(255,255,255,.2);border:0;text-align:center}.hero .k b{color:#fff}.hero .k small,.hero .k span{color:#fff}
-.green{background:var(--v);color:#fff;border-radius:18px;padding:16px;margin-bottom:14px}.green h2{color:#fff}
-.saldo{font-size:34px;font-weight:800;color:#ffe066;margin:6px 0}
-.mov{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #eef1ee;font-size:14px}.mov:first-of-type{border-top:0}
-.mov small{color:var(--g);display:block}
-.pos{color:#17673a;font-weight:700;white-space:nowrap}.neg{color:#b5530a;font-weight:700;white-space:nowrap}
-.cert{background:var(--c);border:1px solid #f1d98a;border-radius:16px;padding:14px;margin-bottom:14px}
-label{font-size:13px;font-weight:700;display:block;margin:8px 0 3px}
-input[type=number]{width:100%;padding:9px;border:1px solid #cdd8d0;border-radius:10px;font:inherit}
-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dde;display:flex;justify-content:center;gap:4px;padding:6px 6px 10px}
-nav button{flex:1;max-width:150px;border:0;background:none;border-radius:12px;padding:7px 4px;font:inherit;font-size:12px;font-weight:700;color:var(--g);cursor:pointer}
-nav button.on{background:#e4f3ea;color:var(--v)}nav i{display:block;font-style:normal;font-size:20px}
-.modal{position:fixed;inset:0;background:rgba(10,30,20,.6);display:none;align-items:center;justify-content:center;padding:14px;z-index:9}
-.modal.on{display:flex}.sheet{background:#fff;border-radius:18px;max-width:440px;width:100%;max-height:90vh;overflow:auto;padding:20px}
-.sheet table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}.sheet td,.sheet th{border-bottom:1px solid #e3e8e4;padding:6px 4px;text-align:left}
-.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--t);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;display:none;z-index:10;max-width:90%}
-.hide{display:none!important}
-button:focus-visible,input:focus-visible{outline:3px solid var(--n);outline-offset:2px}
-@media print{body>*:not(#modal){display:none!important}.modal{position:static;background:none;display:block}.noprint{display:none}}
+  :root {
+    --verde: #1f7a4d; --verde-osc: #145a38; --verde-cl: #e6f4ec;
+    --ambar: #b7791f; --ambar-cl: #fdf3dc;
+    --rojo: #8a4b2a; --rojo-cl: #f6e8df;
+    --tinta: #1d2b24; --gris: #6b7a72; --borde: #dbe5df; --fondo: #f3f6f4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--fondo); color: var(--tinta); }
+  .app { max-width: 460px; margin: 0 auto; min-height: 100vh; background: #fff; box-shadow: 0 0 40px rgba(0,0,0,.08); padding-bottom: 80px; }
+  header { background: var(--verde); color: #fff; padding: 20px 18px 16px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: .9; }
+  .saldo { margin-top: 12px; display: inline-block; background: rgba(255,255,255,.18); border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+  section { padding: 18px; }
+  h2 { font-size: 17px; margin: 0 0 6px; }
+  .nota { font-size: 13px; color: var(--gris); margin: 0 0 12px; }
+  .zona-foto { border: 2px dashed var(--borde); border-radius: 14px; padding: 14px; text-align: center; background: #fafcfb; }
+  .zona-foto img { max-width: 100%; max-height: 260px; border-radius: 10px; display: none; margin: 0 auto 10px; }
+  .btn { display: inline-block; border: 0; border-radius: 10px; padding: 12px 16px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .btn-sec { background: var(--verde-cl); color: var(--verde-osc); }
+  .btn-pri { background: var(--verde); color: #fff; width: 100%; margin-top: 12px; }
+  .btn-pri:disabled { background: #9fb8aa; cursor: not-allowed; }
+  input[type=file] { display: none; }
+  .cargando { display: none; text-align: center; padding: 18px; color: var(--gris); font-size: 14px; }
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--borde); border-top-color: var(--verde); border-radius: 50%; animation: gira 0.8s linear infinite; margin: 0 auto 8px; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  .resultado { display: none; border-radius: 14px; padding: 14px; margin-top: 14px; border: 1px solid var(--borde); }
+  .resultado.venta { background: var(--verde-cl); border-color: #b9dfc9; }
+  .resultado.donacion { background: var(--ambar-cl); border-color: #ecd49a; }
+  .resultado.compost { background: var(--rojo-cl); border-color: #e2c3b0; }
+  .etiqueta { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .resultado h3 { margin: 4px 0 6px; font-size: 19px; }
+  .resultado p { margin: 4px 0; font-size: 14px; line-height: 1.4; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .chip { background: rgba(255,255,255,.7); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; }
+  .aviso { background: #fff; border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-top: 8px; }
+  .error { display: none; background: #fdecea; color: #8a1f17; border-radius: 10px; padding: 12px; font-size: 14px; margin-top: 12px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+  input[type=text], input[type=number], select { width: 100%; padding: 11px; border: 1px solid var(--borde); border-radius: 10px; font-size: 15px; background: #fff; }
+  .fila { display: flex; gap: 10px; }
+  .fila > div { flex: 1; }
+  .cobro { background: var(--verde-cl); border-radius: 12px; padding: 12px; margin-top: 14px; font-size: 14px; }
+  .cobro strong { font-size: 20px; color: var(--verde-osc); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: #fafcfb; border: 1px solid var(--borde); border-radius: 12px; padding: 12px; }
+  .stat b { display: block; font-size: 20px; color: var(--verde-osc); }
+  .stat span { font-size: 12px; color: var(--gris); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+  th, td { padding: 7px 5px; border-bottom: 1px solid var(--borde); text-align: left; }
+  th { color: var(--gris); font-weight: 600; }
+  .vacio { color: var(--gris); font-size: 13px; padding: 10px 0; }
+  .descarga { margin-top: 10px; background: #fff; border: 1px solid var(--verde); color: var(--verde-osc); width: 100%; }
+  footer { text-align: center; font-size: 12px; color: var(--gris); padding: 0 18px 18px; }
 </style>
 </head>
 <body>
 <div class="app">
-<header>
-<h1>ReCosecha Santa Anita</h1>
-<p>Alimentos que siguen contando historias</p>
-<span class="pill" id="pillSaldo"></span>
-<div class="roles">
-<button id="rv" class="on">Soy comerciante</button>
-<button id="rc">Soy juguería o restaurante</button>
+  <header>
+    <h1>ReCosecha Santa Anita</h1>
+    <p>Alimentos que siguen contando historias</p>
+    <div class="saldo">Mi saldo: S/ <span id="saldo">10.00</span></div>
+  </header>
+
+  <section>
+    <h2>📷 Publicar lote con 1 foto</h2>
+    <p class="nota">Toma o sube una foto del producto. La IA identifica qué es, evalúa cómo se ve y sugiere si venderlo, donarlo o llevarlo a compost.</p>
+
+    <div class="zona-foto">
+      <img id="vista" alt="Vista previa de la foto">
+      <label class="btn btn-sec" for="archivo" style="margin:0">📂 Tomar o subir foto</label>
+      <input type="file" id="archivo" accept="image/*">
+    </div>
+    <button class="btn btn-pri" id="analizar" disabled>🔍 Analizar con IA</button>
+
+    <div class="cargando" id="cargando"><div class="spinner"></div>Analizando la foto…</div>
+    <div class="error" id="error"></div>
+
+    <div class="resultado" id="resultado">
+      <div class="etiqueta" id="r-etiqueta"></div>
+      <h3 id="r-producto"></h3>
+      <div class="chips">
+        <span class="chip" id="r-dias"></span>
+        <span class="chip" id="r-conf"></span>
+      </div>
+      <p id="r-estado"></p>
+      <p id="r-motivo"></p>
+      <div class="aviso" id="r-precaucion"></div>
+    </div>
+  </section>
+
+  <section id="formulario" style="display:none; padding-top:0">
+    <h2>Datos del lote</h2>
+    <p class="nota">Se autocompletó con el análisis. Revísalo y corrige lo que haga falta.</p>
+    <label>Producto</label>
+    <input type="text" id="f-producto">
+    <div class="fila">
+      <div><label>Peso (kg)</label><input type="number" id="f-kg" value="10" min="0" step="0.1"></div>
+      <div><label>Precio por kg (S/)</label><input type="number" id="f-precio" value="2.00" min="0" step="0.1"></div>
+    </div>
+    <label>Destino del lote</label>
+    <select id="f-destino">
+      <option value="venta">🟢 Venta en Marketplace</option>
+      <option value="donacion">🟡 Donación a Olla Común</option>
+      <option value="compost">🌱 Compost / Valorización</option>
+    </select>
+    <div class="cobro" id="cobro"></div>
+    <button class="btn btn-pri" id="publicar">🚀 Publicar lote ahora</button>
+  </section>
+
+  <section>
+    <h2>📊 Mi impacto</h2>
+    <div class="stats">
+      <div class="stat"><b id="s-ventas">S/ 0.00</b><span>Recuperados en ventas</span></div>
+      <div class="stat"><b id="s-don">0 kg</b><span>Donados a ollas comunes</span></div>
+      <div class="stat"><b id="s-platos">0</b><span>Platos servidos (aprox.)</span></div>
+      <div class="stat"><b id="s-comp">0 kg</b><span>A compost</span></div>
+    </div>
+    <h2 style="margin-top:20px">Mis lotes</h2>
+    <div id="tabla-wrap"><div class="vacio">Aún no has publicado lotes.</div></div>
+    <button class="btn descarga" id="csv" style="display:none">⬇ Descargar Excel (.CSV)</button>
+  </section>
+
+  <footer>Prototipo universitario. La sugerencia de la IA es una ayuda: confirma siempre el estado del producto antes de vender o donar.</footer>
 </div>
-</header>
-<main id="main"></main>
-</div>
-<nav id="nav"></nav>
-<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
-<div class="toast" id="toast"></div>
 
 <script>
-(function(){
-var COMISION=0.03, PLATOS_KG=3.75, AHORRO_KG=0.6016, BONO_KG=0.015;
-var EMO={mandarina:"🍊",naranja:"🍊",limon:"🍋",limón:"🍋",cebolla:"🧅",tomate:"🍅",papaya:"🥭",platano:"🍌",plátano:"🍌",banana:"🍌",manzana:"🍎",uva:"🍇",zapallo:"🎃",zanahoria:"🥕",papa:"🥔",palta:"🥑",piña:"🍍",fresa:"🍓",sandia:"🍉",sandía:"🍉",lechuga:"🥬",pimiento:"🫑",choclo:"🌽"};
-var VERD=["cebolla","tomate","zapallo","zanahoria","papa","lechuga","pimiento","choclo","verdura","ajo","apio","col","brócoli","brocoli","pepino"];
-var OLLAS=["Olla Común Las Flores - Santa Anita","Olla Común Virgen de Fátima - Ate","Comedor San Martín - El Agustino","Olla Común Nuevo Amanecer - Ate"];
+const COMISION = 0.03;
+const PLATOS_POR_KG = 4; // supuesto del prototipo
+let imagenBase64 = null;
+let ultimo = null;
+let saldo = 10.0;
+const lotes = [];
 
-var S={
- rol:"v", tab:"pub", filtro:"todos", saldo:10, recup:96, donKg:64, compKg:50, ahorro:38.5, platos:240, ollasKg:375, ollasPlatos:1500,
- mov:[{t:"🌱 Bono por tus desechos (50 kg de Tomate picado recogidos en tu puesto)",m:0.75,w:"Hoy 11:20 a. m."},
-      {t:"🛒 Comisión 3% por venta de Mandarina en Marketplace (S/ 36.00)",m:-1.08,w:"Ayer 1:15 p. m."},
-      {t:"💳 Recarga inicial de Saldo Prepagado (Yape)",m:10,w:"Lun 8:00 a. m."}],
- lotes:[], dons:[], n:1,
- mercado:[
-  {id:"s1",prod:"Mandarina",kg:30,total:24,desc:50,dias:2,puesto:"Puesto 214 (Walther)",cat:"fruta",mine:false},
-  {id:"s2",prod:"Limón Sutil",kg:12,total:18,desc:45,dias:2,puesto:"Puesto 131 (Santiago)",cat:"fruta",mine:false},
-  {id:"s3",prod:"Cebolla Roja",kg:60,total:66,desc:40,dias:3,puesto:"Puesto 302 (Elías Rojas)",cat:"verdura",mine:false}],
- ollas:[
-  {n:OLLAS[0],t:"18 kg de Papaya Madura",p:72},{n:OLLAS[1],t:"22 kg de Plátano Seda",p:88},{n:OLLAS[2],t:"24 kg de Zapallo y Verduras",p:96}],
- img:null, res:null, busy:false, err:""
-};
-try{var sv=JSON.parse(localStorage.getItem("recosecha_v2"));if(sv&&sv.mov){sv.img=null;sv.res=null;sv.busy=false;sv.err="";S=sv;S.rol="v";S.tab="pub"}}catch(e){}
-function save(){try{var c=Object.assign({},S,{img:null,res:null,busy:false,err:""});localStorage.setItem("recosecha_v2",JSON.stringify(c))}catch(e){}}
+const $ = (id) => document.getElementById(id);
+const nombres = { venta: "Venta en Marketplace", donacion: "Donación a Olla Común", compost: "Compost / Valorización" };
+const etiquetas = { venta: "🟢 Sugerencia: vender", donacion: "🟡 Sugerencia: donar", compost: "🌱 Sugerencia: compost" };
 
-var $=function(i){return document.getElementById(i)};
-function money(n){return "S/ "+Number(n).toFixed(2)}
-function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function emoji(p){var k=String(p||"").toLowerCase();for(var x in EMO){if(k.indexOf(x)>-1)return EMO[x]}return "🍎"}
-function cat(p){var k=String(p||"").toLowerCase();return VERD.some(function(v){return k.indexOf(v)>-1})?"verdura":"fruta"}
-function toast(m){var t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(function(){t.style.display="none"},2800)}
-function hoy(){return new Date().toLocaleString("es-PE",{dateStyle:"short",timeStyle:"short"})}
-function mover(t,m){S.mov.unshift({t:t,m:m,w:"Ahora"});S.saldo=Math.round((S.saldo+m)*100)/100}
-
-/* ---------- Navegación ---------- */
-function nav(){
- var items=S.rol==="v"?[["pub","📷","Publicar lote"],["imp","📊","Mi impacto y SUNAT"],["sal","💳","Mi saldo y premios"]]:[["mer","🛒","Comprar lotes"],["oll","🍲","Ollas ayudadas ("+Math.round(S.ollasKg/25)+")"]];
- $("nav").innerHTML=items.map(function(i){return '<button data-t="'+i[0]+'" class="'+(S.tab===i[0]?"on":"")+'"><i>'+i[1]+'</i>'+i[2]+'</button>'}).join("");
- $("rv").className=S.rol==="v"?"on":"";$("rc").className=S.rol==="c"?"on":"";
- $("pillSaldo").textContent="Mi saldo: "+money(S.saldo);
-}
-$("nav").onclick=function(e){var b=e.target.closest("button");if(b){S.tab=b.dataset.t;render()}};
-$("rv").onclick=function(){S.rol="v";S.tab="pub";render()};
-$("rc").onclick=function(){S.rol="c";S.tab="mer";render()};
-
-/* ---------- Pantallas ---------- */
-function vPub(){
- var h='<div class="card"><h2>📷 Publicar lote con 1 foto</h2><p class="sub">Toma o sube una foto del producto. La IA identifica qué es, evalúa cómo se ve y sugiere si venderlo, donarlo o llevarlo a compost.</p>'+
- '<div class="drop">'+(S.img?'<img src="'+S.img+'" alt="Foto del lote">':'')+'<input type="file" id="foto" accept="image/*" class="hide"><button class="btn l s" id="pick">'+(S.img?"Cambiar foto":"Tomar o subir foto")+'</button></div>'+
- '<button class="btn" id="analizar" '+(!S.img||S.busy?"disabled":"")+'>'+(S.busy?"Analizando… puede tardar unos segundos":"Analizar con IA")+'</button>'+
- (S.err?'<div class="err">'+esc(S.err)+'</div>':'')+'</div>';
- if(S.res)h+=resultado();
- h+='<div class="card"><h2>Mis lotes</h2>'+(S.lotes.length?S.lotes.map(function(l){
-  return '<div class="lot"><div class="em">'+emoji(l.prod)+'</div><div style="flex:1"><b>'+esc(l.prod)+' • '+l.kg+' kg</b><br><span class="sub" style="margin:0">'+esc(l.nota)+'</span></div><span class="tag t-'+l.est+'">'+l.estTxt+'</span></div>'}).join(""):'<p class="sub">Aún no has publicado lotes.</p>')+'</div>';
- return h;
-}
-function resultado(){
- var r=S.res;
- if(r.es_alimento===false)return '<div class="card"><h2>No pude ver un alimento</h2><p>'+esc(r.motivo||"")+'</p><p class="sub">'+esc(r.precaucion||"Prueba con una foto más clara y con buena luz.")+'</p></div>';
- var d=r.destino,tx={venta:"Vender en el Marketplace",donacion:"Donar a una olla común",compost:"Llevar a compost"}[d]||d;
- var h='<div class="card"><div class="row"><h2 style="margin:0">'+emoji(r.producto)+' '+esc(r.producto)+'</h2><span class="tag t-'+d+'">'+tx+'</span></div>'+
- '<p class="sub" style="margin-top:8px">Estado: '+esc(r.estado_visible)+'</p><p>'+esc(r.motivo)+'</p>'+
- '<p class="sub">Días útiles: <b>'+r.dias_utiles+'</b> • Confianza: <b>'+esc(r.confianza)+'</b></p>'+
- '<div class="cert" style="margin:10px 0">⚠️ '+esc(r.precaucion)+'</div>'+
- '<label for="kg">Peso del lote (kg)</label><input type="number" id="kg" min="1" step="1" value="10">';
- if(d==="venta")h+='<label for="pk">Precio por kg (S/)</label><input type="number" id="pk" min="0.1" step="0.1" value="1.00"><p class="sub">Al venderse se descuenta 3% de comisión de tu saldo prepagado.</p>';
- h+='<div style="height:10px"></div><button class="btn '+(d==="venta"?"":"o")+'" id="accion">'+{venta:"Publicar en el Marketplace",donacion:"Registrar donación y generar constancia",compost:"Pedir recojo gratis de desechos"}[d]+'</button></div>';
- return h;
-}
-function vImp(){
- var h='<div class="green"><span class="pill">🏅 Puesto aliado ReCosecha</span><h2 style="margin-top:8px;font-size:20px">¡Tu esfuerzo nunca termina en la basura!</h2><p style="margin:0;font-size:13px">Tus alimentos ya ayudaron a '+Math.max(1,Math.round(S.donKg/4.3))+' ollas comunes y cuidan el planeta sin que salgas de tu puesto.</p></div>'+
- '<div class="card"><h2>📊 Mi impacto y beneficios</h2><div class="grid">'+
- '<div class="k k1"><small>RECUPERADOS EN VENTAS</small><b>'+money(S.recup)+'</b><span>Pagado directo a ti</span></div>'+
- '<div class="k k2"><small>DONADOS A OLLAS COMUNES</small><b>'+S.donKg+' kg ('+Math.round(S.platos)+' platos)</b><span>Platos servidos con tu ayuda</span></div>'+
- '<div class="k k3"><small>DESECHOS RECICLADOS</small><b>'+S.compKg+' kg (0 kg basura)</b><span>Recojo gratis + bono de saldo</span></div>'+
- '<div class="k k4"><small>AHORRO IMPUESTOS SUNAT</small><b>'+money(S.ahorro)+'</b><span>Descuento Impuesto a la Renta (estimado)</span></div></div>'+
- '<div class="cert" style="margin-top:14px"><b>📄 Certificado tributario por tus donaciones</b><p class="sub" style="color:#7a4a00">Por donar a comedores registrados en SUNAT (Ley N.° 30498), tienes <b>'+money(S.ahorro)+'</b> de ahorro estimado, listo para tu contador.</p><button class="btn o" id="verRecibo">Ver y descargar constancia</button></div></div>';
- return h;
-}
-function vSal(){
- return '<div class="green"><small>SALDO PREPAGADO RECOSECHA</small><div class="saldo">'+money(S.saldo)+'</div><p style="font-size:13px;margin:0 0 12px">Solo se descuenta 3% cuando vendes un lote en el Marketplace. Recarga mínima S/ 10.00 con Yape o Plin.</p><button class="btn o" id="recarga">+ Recargar S/ 10.00 con Yape o Plin</button></div>'+
- '<div class="card" style="background:#eafbf2"><h2>🌱 ¡Gana por tus desechos sin moverte de tu puesto!</h2><p class="sub" style="margin:0">No pierdas tiempo ni pagues por botar tu merma. Nuestro equipo recoge tus frutas y verduras picadas gratis en tu puesto y te premia con saldo en tu app.</p></div>'+
- '<div class="card"><h2>Historial de movimientos y bonos</h2>'+S.mov.map(function(m){return '<div class="mov"><div>'+esc(m.t)+'<small>'+esc(m.w)+'</small></div><span class="'+(m.m>=0?"pos":"neg")+'">'+(m.m>=0?"+ ":"- ")+money(Math.abs(m.m))+'</span></div>'}).join("")+'</div>';
-}
-function vMer(){
- var l=S.mercado.filter(function(x){return S.filtro==="todos"||x.cat===S.filtro});
- var h='<div class="card"><div class="row"><div><h2 style="margin:0">Juguería Doña Rosa • Santa Anita</h2><p class="sub" style="margin:0">Lotes mayoristas con recojo directo en puesto</p></div></div></div>'+
- '<div class="chips"><button data-f="todos" class="'+(S.filtro==="todos"?"on":"")+'">Todos</button><button data-f="fruta" class="'+(S.filtro==="fruta"?"on":"")+'">🍊 Frutas jugo</button><button data-f="verdura" class="'+(S.filtro==="verdura"?"on":"")+'">🍅 Hortalizas menú</button></div>';
- if(!l.length)return h+'<div class="card"><p class="sub">No hay lotes en esta categoría por ahora.</p></div>';
- return h+l.map(function(x){return '<div class="card"><div class="row"><div class="lot" style="border:0;padding:0"><div class="em">'+emoji(x.prod)+'</div><div><b>'+esc(x.prod)+' • '+x.kg+' kg</b> <span class="tag t-off">-'+x.desc+'%</span>'+(x.mine?' <span class="tag t-venta">Tuyo</span>':'')+'<br><span class="sub" style="margin:0">📍 '+esc(x.puesto)+' • ⏳ '+x.dias+' días útiles</span></div></div><div style="text-align:right"><b style="font-size:19px;color:var(--v)">'+money(x.total)+'</b><br><span class="sub" style="margin:0">'+money(x.total/x.kg)+' / kg</span></div></div>'+
- '<div class="row" style="margin-top:12px;border-top:1px solid #eef1ee;padding-top:10px"><span style="color:#b5530a;font-weight:700;font-size:13px">⏰ Disponible hasta las 2:00 p. m.</span><button class="btn s" data-buy="'+x.id+'">Comprar lote</button></div></div>'}).join("");
-}
-function vOll(){
- return '<div class="hero"><span class="pill">🍲 Impacto social ReCosecha</span><h2 style="margin-top:8px;font-size:20px">Alimentos que llegan a quienes más lo necesitan</h2><p style="font-size:13px;margin:0 0 10px">Nuestro equipo recoge gratis en los puestos y entrega directamente en cada comedor.</p><div class="grid"><div class="k"><b>'+Math.round(S.ollasKg/25)+'</b><small>Ollas comunes ayudadas</small></div><div class="k"><b>'+Math.round(S.ollasPlatos)+'</b><small>Platos servidos</small></div><div class="k"><b>'+Math.round(S.ollasKg)+' kg</b><small>Entregados</small></div></div></div>'+
- '<div class="card"><h2>Ollas comunes y comedores beneficiados hoy</h2><p class="sub">Trazabilidad de las entregas gratuitas realizadas por ReCosecha:</p>'+S.ollas.map(function(o){return '<div class="cert" style="display:flex;gap:10px;align-items:center;justify-content:space-between"><div><b>'+esc(o.n)+'</b><br><span class="sub" style="margin:0">Recibió hoy: '+esc(o.t)+' ('+o.p+' platos servidos)</span></div><span class="tag t-venta">✓ Entregado</span></div>'}).join("")+'</div>';
+// Reduce la foto para que el envío sea rápido y liviano
+function reducirImagen(file, maxLado = 1024, calidad = 0.82) {
+  return new Promise((resolve, reject) => {
+    const lector = new FileReader();
+    lector.onerror = () => reject(new Error("No se pudo leer la imagen"));
+    lector.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Formato de imagen no compatible"));
+      img.onload = () => {
+        const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * escala);
+        c.height = Math.round(img.height * escala);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL("image/jpeg", calidad));
+      };
+      img.src = lector.result;
+    };
+    lector.readAsDataURL(file);
+  });
 }
 
-function render(){
- nav();
- var v={pub:vPub,imp:vImp,sal:vSal,mer:vMer,oll:vOll}[S.tab]||vPub;
- $("main").innerHTML=v();
- bind();save();
+$("archivo").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  $("error").style.display = "none";
+  $("resultado").style.display = "none";
+  try {
+    imagenBase64 = await reducirImagen(file);
+    $("vista").src = imagenBase64;
+    $("vista").style.display = "block";
+    $("analizar").disabled = false;
+  } catch (err) {
+    mostrarError(err.message);
+  }
+});
+
+function mostrarError(msg) {
+  $("error").textContent = msg;
+  $("error").style.display = "block";
 }
 
-/* ---------- Eventos ---------- */
-function bind(){
- var f=$("foto");
- if(f){$("pick").onclick=function(){f.click()};f.onchange=function(){if(f.files[0])leer(f.files[0])};
-  $("analizar").onclick=analizar}
- if($("accion"))$("accion").onclick=accion;
- if($("verRecibo"))$("verRecibo").onclick=recibo;
- if($("recarga"))$("recarga").onclick=function(){if(confirm("Esto es una simulación de la recarga con Yape o Plin. ¿Sumar S/ 10.00 a tu saldo?")){mover("💳 Recarga de saldo prepagado (Yape o Plin)",10);toast("Recarga registrada");render()}};
- document.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){S.filtro=b.dataset.f;render()}});
- document.querySelectorAll("[data-buy]").forEach(function(b){b.onclick=function(){comprar(b.dataset.buy)}});
+$("analizar").addEventListener("click", async () => {
+  if (!imagenBase64) return;
+  $("error").style.display = "none";
+  $("resultado").style.display = "none";
+  $("cargando").style.display = "block";
+  $("analizar").disabled = true;
+  try {
+    const resp = await fetch("/api/analizar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imagen: imagenBase64 }),
+    });
+    const datos = await resp.json();
+    if (!resp.ok) throw new Error(datos.error || "No se pudo analizar la foto");
+    ultimo = datos.resultado;
+    pintarResultado(ultimo);
+  } catch (err) {
+    mostrarError(err.message);
+  } finally {
+    $("cargando").style.display = "none";
+    $("analizar").disabled = false;
+  }
+});
+
+function pintarResultado(r) {
+  const destino = ["venta", "donacion", "compost"].includes(r.destino) ? r.destino : "compost";
+  const caja = $("resultado");
+  caja.className = "resultado " + destino;
+  caja.style.display = "block";
+  $("r-etiqueta").textContent = etiquetas[destino];
+  $("r-producto").textContent = r.es_alimento === false ? "No parece un alimento" : (r.producto || "Producto");
+  $("r-dias").textContent = "⏳ Días útiles: " + (r.dias_utiles ?? "?");
+  $("r-conf").textContent = "Confianza: " + (r.confianza || "?");
+  $("r-estado").textContent = r.estado_visible || "";
+  $("r-motivo").textContent = r.motivo || "";
+  $("r-precaucion").textContent = "✋ " + (r.precaucion || "Verifica el producto en persona antes de decidir.");
+
+  if (r.es_alimento !== false && r.confianza !== "baja") {
+    $("formulario").style.display = "block";
+    $("f-producto").value = r.producto || "";
+    $("f-destino").value = destino;
+    actualizarCobro();
+  } else {
+    $("formulario").style.display = "none";
+  }
 }
-function leer(file){
- var fr=new FileReader();
- fr.onload=function(){var im=new Image();im.onload=function(){
-  var M=1024,s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement("canvas");
-  c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
-  S.img=c.toDataURL("image/jpeg",0.8);S.res=null;S.err="";render()};
-  im.onerror=function(){S.err="No pude leer esa imagen. Prueba con otra foto.";render()};im.src=fr.result};
- fr.readAsDataURL(file);
+
+function actualizarCobro() {
+  const kg = parseFloat($("f-kg").value) || 0;
+  const precio = parseFloat($("f-precio").value) || 0;
+  const destino = $("f-destino").value;
+  if (destino === "venta") {
+    const total = kg * precio;
+    const com = total * COMISION;
+    $("cobro").innerHTML = `Cobras en tu puesto: <strong>S/ ${total.toFixed(2)}</strong><br>Comisión app (solo si vendes): S/ ${com.toFixed(2)} de tu saldo`;
+  } else if (destino === "donacion") {
+    $("cobro").innerHTML = `Recogemos gratis en tu puesto y lo llevamos a una olla común.<br>Aprox. <strong>${Math.round(kg * PLATOS_POR_KG)} platos</strong>.`;
+  } else {
+    $("cobro").innerHTML = `Recogemos gratis tu merma para compost.<br>Sin costo para ti.`;
+  }
 }
-function analizar(){
- S.busy=true;S.err="";S.res=null;render();
- fetch("/api/analizar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({imagen:S.img})})
- .then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error("El servidor respondió algo inesperado: "+t.slice(0,80))}if(!r.ok)throw new Error(j.error||"Error del servidor");return j})})
- .then(function(j){S.res=j.resultado})
- .catch(function(e){S.err=e.message})
- .then(function(){S.busy=false;render()});
+["f-kg", "f-precio", "f-destino"].forEach((id) => $(id).addEventListener("input", actualizarCobro));
+
+$("publicar").addEventListener("click", () => {
+  const kg = parseFloat($("f-kg").value) || 0;
+  const precio = parseFloat($("f-precio").value) || 0;
+  const destino = $("f-destino").value;
+  if (kg <= 0) return alert("Ingresa un peso válido.");
+  const monto = destino === "venta" ? kg * precio : 0;
+  if (destino === "venta") {
+    const com = monto * COMISION;
+    if (saldo < com) return alert("Saldo insuficiente para la comisión. Recarga tu saldo.");
+    saldo -= com;
+    $("saldo").textContent = saldo.toFixed(2);
+  }
+  lotes.push({
+    id: "L" + String(lotes.length + 1).padStart(3, "0"),
+    producto: $("f-producto").value || "Producto",
+    kg, destino, monto,
+    confianza: ultimo ? ultimo.confianza : "",
+  });
+  render();
+  $("formulario").style.display = "none";
+  $("resultado").style.display = "none";
+  $("vista").style.display = "none";
+  $("archivo").value = "";
+  imagenBase64 = null;
+  $("analizar").disabled = true;
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+});
+
+function render() {
+  const ventas = lotes.filter((l) => l.destino === "venta").reduce((a, l) => a + l.monto, 0);
+  const don = lotes.filter((l) => l.destino === "donacion").reduce((a, l) => a + l.kg, 0);
+  const comp = lotes.filter((l) => l.destino === "compost").reduce((a, l) => a + l.kg, 0);
+  $("s-ventas").textContent = "S/ " + ventas.toFixed(2);
+  $("s-don").textContent = don.toFixed(1) + " kg";
+  $("s-platos").textContent = Math.round(don * PLATOS_POR_KG);
+  $("s-comp").textContent = comp.toFixed(1) + " kg";
+  if (!lotes.length) return;
+  let html = "<table><tr><th>ID</th><th>Producto</th><th>Kg</th><th>Destino</th><th>Monto</th></tr>";
+  lotes.forEach((l) => {
+    html += `<tr><td>${l.id}</td><td>${esc(l.producto)}</td><td>${l.kg}</td><td>${nombres[l.destino]}</td><td>S/ ${l.monto.toFixed(2)}</td></tr>`;
+  });
+  html += "</table>";
+  $("tabla-wrap").innerHTML = html;
+  $("csv").style.display = "block";
 }
-function accion(){
- var r=S.res,kg=Math.max(1,parseFloat($("kg").value)||0),d=r.destino,prod=r.producto;
- if(d==="venta"){
-  var pk=Math.max(0.1,parseFloat($("pk").value)||1),total=Math.round(kg*pk*100)/100,id="m"+(S.n++);
-  S.mercado.unshift({id:id,prod:prod,kg:kg,total:total,desc:30,dias:r.dias_utiles,puesto:"Tu puesto",cat:cat(prod),mine:true});
-  S.lotes.unshift({id:id,prod:prod,kg:kg,est:"venta",estTxt:"En venta",nota:money(total)+" • publicado en el Marketplace"});
-  toast("Lote publicado. Los compradores ya pueden verlo.");
- }else if(d==="donacion"){
-  var olla=OLLAS[S.dons.length%OLLAS.length],pl=Math.round(kg*PLATOS_KG),ah=Math.round(kg*AHORRO_KG*100)/100;
-  var don={no:"CD-"+String(S.dons.length+1).padStart(4,"0"),prod:prod,kg:kg,olla:olla,platos:pl,ahorro:ah,fecha:hoy()};
-  S.dons.unshift(don);S.donKg+=kg;S.platos+=pl;S.ahorro=Math.round((S.ahorro+ah)*100)/100;
-  S.ollas.unshift({n:olla,t:kg+" kg de "+prod,p:pl});S.ollasKg+=kg;S.ollasPlatos+=pl;
-  S.lotes.unshift({prod:prod,kg:kg,est:"donacion",estTxt:"Donado",nota:"Entregado a "+olla});
-  toast("Donación registrada");S.res=null;S.img=null;S.tab="imp";render();recibo();return;
- }else{
-  var b=Math.round(kg*BONO_KG*100)/100;S.compKg+=kg;
-  mover("🌱 Bono por tus desechos ("+kg+" kg de "+prod+" recogidos en tu puesto)",b);
-  S.lotes.unshift({prod:prod,kg:kg,est:"compost",estTxt:"Compost",nota:"Recojo gratis • bono "+money(b)});
-  toast("Recojo solicitado. Bono: "+money(b));
- }
- S.res=null;S.img=null;render();
+
+function esc(t) {
+  return String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
-function comprar(id){
- var x=S.mercado.filter(function(m){return m.id===id})[0];if(!x)return;
- if(!confirm("¿Comprar "+x.prod+" ("+x.kg+" kg) por "+money(x.total)+"? Es una simulación, no se cobra dinero real."))return;
- S.mercado=S.mercado.filter(function(m){return m.id!==id});
- if(x.mine){var c=Math.round(x.total*COMISION*100)/100;S.recup=Math.round((S.recup+x.total)*100)/100;
-  mover("🛒 Comisión 3% por venta de "+x.prod+" en Marketplace ("+money(x.total)+")",-c);
-  S.lotes.forEach(function(l){if(l.id===id){l.est="venta";l.estTxt="Vendido"}})}
- toast("Compra simulada. El puesto te espera hasta las 2:00 p. m.");render();
-}
-function recibo(){
- var f=S.dons,tot=f.reduce(function(a,d){return a+d.kg},0);
- var h='<h2>Constancia de donación de alimentos</h2><p class="sub">ReCosecha Santa Anita • Emitida: '+hoy()+'</p>';
- if(!f.length)h+='<p>Aún no registras donaciones con IA. Cuando dones un lote, aparecerá aquí con su detalle.</p><p class="sub">Tu ahorro acumulado estimado es '+money(S.ahorro)+'.</p>';
- else h+='<table><tr><th>N.°</th><th>Producto</th><th>kg</th><th>Comedor</th></tr>'+f.map(function(d){return '<tr><td>'+d.no+'</td><td>'+esc(d.prod)+'</td><td>'+d.kg+'</td><td>'+esc(d.olla)+'</td></tr>'}).join("")+'</table><p><b>Total donado ahora: '+tot+' kg</b> • Ahorro tributario estimado: <b>'+money(f.reduce(function(a,d){return a+d.ahorro},0))+'</b></p>';
- h+='<p class="sub">Documento referencial generado por la app (Ley N.° 30498). Para fines tributarios, valida con tu contador y solicita el comprobante al comedor receptor.</p>'+
- '<div class="noprint" style="display:flex;gap:8px"><button class="btn" id="imprimir">Imprimir o guardar PDF</button><button class="btn l" id="cerrar">Cerrar</button></div>';
- $("sheet").innerHTML=h;$("modal").className="modal on";
- $("cerrar").onclick=function(){$("modal").className="modal"};$("imprimir").onclick=function(){window.print()};
-}
-$("modal").onclick=function(e){if(e.target===$("modal"))$("modal").className="modal"};
-render();
-})();
+
+$("csv").addEventListener("click", () => {
+  const filas = [["ID", "Producto", "Kg", "Destino", "Monto (S/)", "Confianza IA"]];
+  lotes.forEach((l) => filas.push([l.id, l.producto, l.kg, nombres[l.destino], l.monto.toFixed(2), l.confianza]));
+  const csv = "﻿" + filas.map((f) => f.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "recosecha_lotes.csv";
+  a.click();
+});
 </script>
 </body>
 </html>
