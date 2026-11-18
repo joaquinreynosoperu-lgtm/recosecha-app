@@ -1,7 +1,7 @@
 // Función serverless de Vercel: recibe una foto (base64) y devuelve el análisis en JSON.
-// La clave de API vive solo aquí, en el servidor, como variable de entorno.
+// Usa la API de Gemini (Google AI Studio). La clave vive solo aquí, en el servidor.
 
-const GATEWAY_URL = "https://ai-gateway.vercel.sh/v1/chat/completions";
+const API_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
 
 const PROMPT = `Eres un asistente de inspección de frutas y verduras para comerciantes de un mercado mayorista en Lima, Perú.
 Analiza la foto y responde SOLO con un objeto JSON válido, sin texto adicional, con esta forma exacta:
@@ -30,16 +30,23 @@ function extraerJSON(texto) {
   return JSON.parse(texto.slice(inicio, fin + 1));
 }
 
+function mensajeDeError(datos) {
+  const d = Array.isArray(datos) ? datos[0] : datos;
+  const e = d && d.error;
+  if (!e) return "Error del servicio de IA";
+  return typeof e === "string" ? e : e.message || JSON.stringify(e);
+}
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Usa POST" });
   }
 
-  const apiKey = process.env.AI_GATEWAY_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "Falta la variable AI_GATEWAY_API_KEY en Vercel" });
+    return res.status(500).json({ error: "Falta la variable GEMINI_API_KEY en Vercel" });
   }
-  const modelo = process.env.MODEL || "google/gemini-2.5-flash";
+  const modelo = process.env.MODEL || "gemini-2.5-flash";
 
   try {
     const { imagen } = req.body || {};
@@ -47,7 +54,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: "Falta la imagen" });
     }
 
-    const respuesta = await fetch(GATEWAY_URL, {
+    const respuesta = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,8 +77,7 @@ module.exports = async (req, res) => {
 
     const datos = await respuesta.json();
     if (!respuesta.ok) {
-      const detalle = (datos && datos.error && (datos.error.message || datos.error)) || "Error del servicio de IA";
-      return res.status(502).json({ error: `IA: ${typeof detalle === "string" ? detalle : JSON.stringify(detalle)}`, modelo });
+      return res.status(502).json({ error: `IA (${respuesta.status}): ${mensajeDeError(datos)}`, modelo });
     }
 
     const texto = datos.choices && datos.choices[0] && datos.choices[0].message && datos.choices[0].message.content;
