@@ -54,25 +54,32 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: "Falta la imagen" });
     }
 
+    const cuerpo = {
+      model: modelo,
+      temperature: 0.2,
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: PROMPT },
+            { type: "image_url", image_url: { url: imagen } },
+          ],
+        },
+      ],
+    };
+    // Pedimos poco "razonamiento" para que responda rápido. Con REASONING=off no se envía.
+    if (process.env.REASONING !== "off") {
+      cuerpo.reasoning_effort = process.env.REASONING || "low";
+    }
+
     const respuesta = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({
-        model: modelo,
-        temperature: 0.2,
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: PROMPT },
-              { type: "image_url", image_url: { url: imagen } },
-            ],
-          },
-        ],
-      }),
+      body: JSON.stringify(cuerpo),
+      signal: AbortSignal.timeout(26000), // corta antes del límite de 30 s de Vercel
     });
 
     const datos = await respuesta.json();
@@ -84,6 +91,9 @@ module.exports = async (req, res) => {
     const resultado = extraerJSON(String(texto || ""));
     return res.status(200).json({ resultado, modelo });
   } catch (e) {
+    if (e && (e.name === "TimeoutError" || e.name === "AbortError")) {
+      return res.status(504).json({ error: "La IA tardó demasiado en responder. Intenta de nuevo." });
+    }
     return res.status(500).json({ error: e.message || "Error inesperado" });
   }
 };
