@@ -211,6 +211,41 @@ input[type=text],input[type=number]{width:100%;padding:11px;border:1px solid var
 .btn-yape{background:#742284;color:#fff}
 .btn-plin{background:#00a6b4;color:#fff}
 
+/* Precio sugerido por la IA */
+.precio-ia{background:#fff;border:1px solid #bfe5cd;border-radius:14px;padding:11px 12px;margin-top:10px}
+.precio-ia .fila-p{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.precio-ia small{font-size:11px;font-weight:800;color:var(--v700);letter-spacing:.03em;text-transform:uppercase}
+.precio-ia .grande{font-size:22px;font-weight:800;color:var(--v800)}
+.precio-ia .grande span{font-size:13px;color:var(--gris);font-weight:700}
+.precio-ia p{margin:4px 0 0;font-size:12.5px;color:var(--gris)}
+.precio-ia .usar{margin-top:8px;width:100%;background:var(--v800);color:#fff;border:0;border-radius:10px;padding:9px;font-size:13px;font-weight:700}
+.precio-ia .ok{margin-top:8px;font-size:12px;font-weight:700;color:var(--v600)}
+.compost-10{background:#fff;border:1px solid var(--teal200);border-radius:14px;padding:11px 12px;margin-top:10px;font-size:13px;line-height:1.45}
+.compost-10 b.big{display:block;font-size:20px;color:var(--teal);margin-top:2px}
+
+/* Retiros */
+.resumen3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0 12px}
+.resumen3 div{background:rgba(255,255,255,.1);border-radius:12px;padding:8px 6px;text-align:center}
+.resumen3 small{display:block;font-size:9.5px;font-weight:700;color:#cdebd9;text-transform:uppercase}
+.resumen3 b{font-size:13.5px}
+.cuenta{display:flex;align-items:center;gap:11px;border:1px solid var(--borde);border-radius:16px;padding:11px;margin-top:9px;background:#fbfdfc}
+.cuenta .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex-shrink:0;color:#fff;font-weight:800}
+.cuenta .info{flex:1;min-width:0}
+.cuenta b{font-size:14px;display:block}
+.cuenta small{font-size:11.5px;color:var(--gris);display:block}
+.cuenta .borrar{border:0;background:none;font-size:18px;color:var(--gris);padding:4px}
+.ico-banco{background:var(--azul)}.ico-yape{background:#742284}.ico-plin{background:#00a6b4}.ico-tarjeta{background:#3b3b3b}
+.tipos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0 4px}
+.tipos button{border:1px solid var(--borde);background:#fff;border-radius:12px;padding:9px 2px;font-size:11.5px;font-weight:700;color:var(--gris)}
+.tipos button.activo{border-color:var(--v600);background:var(--v100);color:var(--v700)}
+select{width:100%;padding:11px;border:1px solid var(--borde);border-radius:12px;font-size:15px;background:#fff;font-family:inherit}
+.hoja label{margin-top:10px}
+.elegir{display:flex;align-items:center;gap:10px;border:1px solid var(--borde);border-radius:14px;padding:10px;margin-top:8px;cursor:pointer;font-size:13px}
+.elegir input{margin:0}
+.elegir.activo{border-color:var(--v600);background:var(--v50)}
+.seguro{font-size:11.5px;color:var(--gris);margin-top:10px}
+.err-form{color:var(--rojo);font-size:12.5px;font-weight:700;margin-top:8px;min-height:1em}
+
 @media (max-width:480px){
   body{display:block;background:var(--fondo)}
   .phone{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none;background:none}
@@ -312,9 +347,9 @@ input[type=text],input[type=number]{width:100%;padding:11px;border:1px solid var
       <div class="card">
         <h2>📊 Mi Impacto y Beneficios</h2>
         <div class="stats">
-          <div class="stat s-v"><small>Recuperados en ventas</small><b id="i-ventas"></b><span>Pagado directo a ti</span></div>
+          <div class="stat s-v"><small>Recuperados en ventas</small><b id="i-ventas"></b><span>Abonado a tu saldo (menos 3%)</span></div>
           <div class="stat s-a"><small>Donados a ollas comunes</small><b id="i-don"></b><span>Platos servidos con tu ayuda</span></div>
-          <div class="stat s-t"><small>Desechos reciclados</small><b id="i-comp"></b><span>Recojo gratis + Bono Saldo</span></div>
+          <div class="stat s-t"><small>Desechos reciclados</small><b id="i-comp"></b><span>Recojo gratis + 10% del compost</span></div>
           <div class="stat s-y"><small>Ahorro impuestos SUNAT</small><b id="i-sunat"></b><span>Estimado (simulado)</span></div>
         </div>
         <div class="certif">
@@ -326,21 +361,32 @@ input[type=text],input[type=number]{width:100%;padding:11px;border:1px solid var
       <div class="card">
         <div class="cab"><h2>Mis lotes recientes</h2><span class="badge b-verde" id="n-lotes"></span></div>
         <div id="mis-lotes"></div>
-        <button class="btn btn-borde" id="csv">⬇ Descargar Excel (.CSV)</button>
+        <button class="btn btn-borde" id="csv">⬇ Descargar CSV (se abre en Excel)</button>
       </div>
     </div>
 
     <!-- ============ COMERCIANTE: SALDO ============ -->
     <div class="view" id="v-comerciante-saldo" hidden>
       <div class="saldo-card">
-        <div class="cab"><small>SALDO PREPAGADO RECOSECHA</small><span class="badge">3% solo al vender</span></div>
+        <div class="cab"><small>SALDO DISPONIBLE PARA RETIRAR</small><span class="badge">3% solo al vender</span></div>
         <div class="monto" id="saldo-grande"></div>
-        <p>Solo se descuenta 3% cuando vendes un lote en el Marketplace. Recarga mínima S/ 10.00 con Yape o Plin.</p>
-        <button class="btn btn-nar" id="recargar">+ Recargar saldo con Yape o Plin</button>
+        <p>Aquí se junta lo que ganas con ReCosecha: tus ventas del Marketplace (ya con el 3% de comisión descontado) y tu 10% de la ganancia del compost. Retíralo cuando quieras.</p>
+        <div class="resumen3">
+          <div><small>Ventas netas</small><b id="r-ventas-netas"></b></div>
+          <div><small>Compost 10%</small><b id="r-compost"></b></div>
+          <div><small>Ya retirado</small><b id="r-retirado"></b></div>
+        </div>
+        <button class="btn btn-nar" id="retirar">🏦 Retirar mi dinero</button>
+      </div>
+      <div class="card">
+        <div class="cab"><h2>🏦 Mis cuentas para retirar</h2><span class="badge b-verde" id="n-cuentas"></span></div>
+        <p class="nota" style="margin-bottom:0">Retira a tu cuenta bancaria, Yape, Plin o tarjeta. Los métodos que uses se guardan aquí para la próxima vez.</p>
+        <div id="cuentas"></div>
+        <button class="btn btn-borde" id="agregar-cuenta">+ Retirar a un banco, Yape/Plin o tarjeta nueva</button>
       </div>
       <div class="card premio">
         <h2>🌱 ¡Gana por tus desechos sin moverte de tu puesto!</h2>
-        <p class="nota" style="margin-bottom:0">No pierdas tiempo ni pagues por botar tu merma. Nuestro equipo recoge tus frutas y verduras picadas gratis en tu puesto, gestiona todo y te premia con S/ 0.015 por kg en tu saldo por ayudar al planeta.</p>
+        <p class="nota" style="margin-bottom:0">No pierdas tiempo ni pagues por botar tu merma. Nuestro equipo recoge gratis tus frutas y verduras picadas en tu puesto y las convierte en compost. Cuando ese compost se vende, <b>tú ganas el 10% de la ganancia</b> (aprox. S/ 0.015 por kg) y se abona en tu saldo.</p>
       </div>
       <div class="card">
         <h2>Historial de movimientos y bonos</h2>
@@ -399,7 +445,11 @@ input[type=text],input[type=number]{width:100%;padding:11px;border:1px solid var
 /* ================== CONFIGURACIÓN DEL PROTOTIPO ================== */
 const COMISION = 0.03;          // 3% solo cuando se vende
 const PLATOS_POR_KG = 4;        // supuesto del prototipo
-const BONO_COMPOST_KG = 0.015;  // S/ por kg de merma recogida
+const GANANCIA_COMPOST_KG = 0.15; // supuesto: ganancia que genera el compost por kg de merma
+const PARTICIPACION_COMPOST = 0.10; // el comerciante gana el 10% de esa ganancia
+const BONO_COMPOST_KG = GANANCIA_COMPOST_KG * PARTICIPACION_COMPOST; // = S/ 0.015 por kg
+const RETIRO_MIN = 5;             // retiro mínimo en soles
+const BANCOS = ["BCP", "Interbank", "BBVA", "Scotiabank", "BanBif", "Banco de la Nación", "Caja Huancayo", "Caja Arequipa"];
 const TASA_IR = 0.295;          // tasa de referencia para el ahorro estimado
 const PRECIO_REF_KG = 2.00;     // valor de referencia por kg donado
 const YO = { nombre: "Walther", puesto: "Puesto 214" };
@@ -413,12 +463,12 @@ const OLLAS = [
 ];
 // Entregas previas del resto de la red (simulado) para que los totales se vean como en la maqueta
 const RED_BASE = { ollas: 12, kg: 311 };
-const KEY = "recosecha_demo_v2";
+const KEY = "recosecha_demo_v3";
 
 const EJEMPLOS = {
-  mandarina: { kg: 30, normal: 1.6, precio: 0.8, r: { es_alimento: true, producto: "Mandarina", estado_visible: "Cáscara firme y brillante, color uniforme, sin golpes visibles.", dias_utiles: 2, destino: "venta", confianza: "alta", motivo: "Está en buen estado y le quedan 2 días: conviene venderla hoy a precio de oferta.", precaucion: "Presiona algunas al azar para confirmar que siguen firmes." } },
-  papaya: { kg: 18, r: { es_alimento: true, producto: "Papaya Madura", estado_visible: "Muy madura, cáscara amarilla con manchas leves, sin moho.", dias_utiles: 1, destino: "donacion", confianza: "media", motivo: "Ya no conviene venderla, pero sigue comestible y sirve hoy en una olla común.", precaucion: "Ábrela y revisa que no tenga mal olor antes de entregarla." } },
-  tomate: { kg: 50, r: { es_alimento: true, producto: "Tomate picado", estado_visible: "Partes blandas, piel rota y zonas con moho.", dias_utiles: 0, destino: "compost", confianza: "alta", motivo: "Tiene moho y daño avanzado: no es apto para consumo, pero sirve para compost.", precaucion: "Sepáralo del resto para que no contamine otros lotes." } },
+  mandarina: { kg: 30, r: { es_alimento: true, producto: "Mandarina", estado_visible: "Cáscara firme y brillante, color uniforme, sin golpes visibles.", dias_utiles: 2, destino: "venta", confianza: "alta", motivo: "Está en buen estado y le quedan 2 días: conviene venderla hoy a precio de oferta.", precaucion: "Presiona algunas al azar para confirmar que siguen firmes.", precio_referencia_kg: 1.6, precio_sugerido_kg: 1.1, precio_min_kg: 0.95, precio_max_kg: 1.25, motivo_precio: "Buen estado pero solo 2 días útiles: un 30% de descuento la vuelve atractiva para juguerías hoy mismo." } },
+  papaya: { kg: 18, r: { es_alimento: true, producto: "Papaya Madura", estado_visible: "Muy madura, cáscara amarilla con manchas leves, sin moho.", dias_utiles: 1, destino: "donacion", confianza: "media", motivo: "Ya no conviene venderla, pero sigue comestible y sirve hoy en una olla común.", precaucion: "Ábrela y revisa que no tenga mal olor antes de entregarla.", precio_referencia_kg: 2.0, precio_sugerido_kg: null, precio_min_kg: null, precio_max_kg: null, motivo_precio: "" } },
+  tomate: { kg: 50, r: { es_alimento: true, producto: "Tomate picado", estado_visible: "Partes blandas, piel rota y zonas con moho.", dias_utiles: 0, destino: "compost", confianza: "alta", motivo: "Tiene moho y daño avanzado: no es apto para consumo, pero sirve para compost.", precaucion: "Sepáralo del resto para que no contamine otros lotes.", precio_referencia_kg: 1.8, precio_sugerido_kg: null, precio_min_kg: null, precio_max_kg: null, motivo_precio: "" } },
 };
 
 /* ================== DATOS INICIALES (DEMO) ================== */
@@ -440,15 +490,16 @@ function semilla() {
       { olla: "Comedor San Martín", distrito: "El Agustino", icono: "🍛", producto: "Zapallo y Verduras", kg: 24, platos: 96, fecha: ahora - 7 * H },
     ],
     movimientos: [
-      { tipo: "bono", texto: "Bono por tus desechos (50 kg de Tomate picado recogidos en tu puesto)", monto: 0.75, fecha: ahora - 3 * H },
-      { tipo: "comision", texto: "Comisión 3% por venta de Mango Kent en Marketplace (S/ 36.00)", monto: -1.08, fecha: ahora - 25 * H },
-      { tipo: "recarga", texto: "Recarga inicial de Saldo Prepagado (Yape)", monto: 10, fecha: ahora - 50 * H },
+      { tipo: "bono", texto: "Tu 10% de la ganancia del compost (50 kg de Tomate picado recogidos en tu puesto)", monto: 0.75, fecha: ahora - 3 * H },
+      { tipo: "comision", texto: "Comisión 3% de ReCosecha por la venta de Mango Kent", monto: -1.08, fecha: ahora - 25 * H },
+      { tipo: "venta", texto: "Venta de Mango Kent (40 kg) a Juguería Doña Rosa", monto: 36, fecha: ahora - 25 * H },
     ],
+    cuentas: [],
   };
 }
 
 function cargar() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.lotes)) return s; } catch (e) {}
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.lotes)) { s.cuentas = s.cuentas || []; return s; } } catch (e) {}
   return semilla();
 }
 function guardar() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
@@ -567,7 +618,7 @@ $("analizar").addEventListener("click", async () => {
     const resp = await fetch("/api/analizar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ imagen: imagenBase64 }) });
     const datos = await resp.json();
     if (!resp.ok) throw new Error(datos.error || "No se pudo analizar la foto");
-    pintarResultado(datos.resultado, { kg: 30, normal: 2, precio: 1 });
+    pintarResultado(datos.resultado, { kg: 30 });
   } catch (err) { mostrarError(err.message); }
   finally { $("cargando").style.display = "none"; $("analizar").disabled = false; }
 });
@@ -582,7 +633,7 @@ document.querySelectorAll(".ej").forEach((b) => b.addEventListener("click", () =
 const INFO_DESTINO = {
   venta: { t: "🟢 Venta en Marketplace (Se ofrece hasta las 2:00 p. m.)", tag: "Catálogo", cls: "b-verde", p: "Se ofrece a juguerías y restaurantes hasta las 2:00 p. m. Si no se vende, lo recogemos gratis en tu puesto para llevarlo a una Olla Común." },
   donacion: { t: "🟡 Donación a Olla Común (recojo gratis)", tag: "Ollas + SUNAT", cls: "b-amb", p: "Lo recogemos en tu puesto y lo entregamos hoy a una olla común. Se suma a la constancia de tus donaciones." },
-  compost: { t: "🌱 Compost / Valorización", tag: "Bono desechos", cls: "b-teal", p: "No apto para consumo. Lo recogemos gratis en tu puesto y ganas S/ 0.015 por kg en tu saldo." },
+  compost: { t: "🌱 Compost / Valorización", tag: "Ganas 10%", cls: "b-teal", p: "No apto para consumo. Lo recogemos gratis en tu puesto y lo convertimos en compost. Cuando ese compost se vende, tú ganas el 10% de la ganancia que genere." },
 };
 const SUGERENCIA = { venta: "vender", donacion: "donar", compost: "compost" };
 
@@ -595,10 +646,13 @@ function pintarResultado(r, valores) {
       <div class="aviso">📸 Toma la foto con buena luz, de cerca y mostrando varias unidades.</div></div>`;
     $("formulario").hidden = true; return;
   }
+  // Precios: primero lo que sugiere la IA; si no dio precio, valores por defecto
+  const normal = Number(r.precio_referencia_kg) || 2;
+  const precio = Number(r.precio_sugerido_kg) || +(normal * 0.6).toFixed(2);
   $("f-producto").value = r.producto || "";
   $("f-kg").value = valores.kg ?? 30;
-  $("f-normal").value = (valores.normal ?? 2).toFixed(2);
-  $("f-precio").value = (valores.precio ?? 1).toFixed(2);
+  $("f-normal").value = normal.toFixed(2);
+  $("f-precio").value = precio.toFixed(2);
   formDestino = destino;
   $("formulario").hidden = false;
   actualizarFormulario();
@@ -612,9 +666,36 @@ function pintarRecomendacion() {
     <div class="cab"><h3>${info.t}</h3><span class="badge ${info.cls}">${info.tag}</span></div>
     <p>${info.p}</p>
     <div class="chips"><span class="chip">${emoji(r.producto)} ${esc(r.producto || "Producto")}</span><span class="chip">⏳ ${esc(r.dias_utiles ?? "?")} días útiles</span><span class="chip">Confianza: ${esc(r.confianza || "?")}</span></div>
-    <div class="ia">🤖 Sugerencia de la IA: <b>${SUGERENCIA[sug]}</b>${formDestino !== sug ? " (cambiaste el destino)" : ""}. ${esc(r.estado_visible || "")} ${esc(r.motivo || "")}</div>
+    <div class="ia">🤖 Sugerencia de la IA: <b>${SUGERENCIA[sug]}${textoPrecioIA(r)}</b>${formDestino !== sug ? " (cambiaste el destino)" : ""}. ${esc(r.estado_visible || "")} ${esc(r.motivo || "")} ${detallePrecioIA(r)}</div>
+    ${bloqueExtra(r)}
     <div class="aviso">✋ ${esc(r.precaucion || "Verifica el producto en persona antes de decidir.")}</div>
   </div>`;
+}
+
+// El precio sugerido va dentro del mismo texto del análisis de la IA
+function textoPrecioIA(r) {
+  const sug = Number(r.precio_sugerido_kg);
+  return formDestino === "venta" && sug ? ` a ${money(sug)}/kg` : "";
+}
+function detallePrecioIA(r) {
+  if (formDestino !== "venta") return "";
+  const sug = Number(r.precio_sugerido_kg), ref = Number(r.precio_referencia_kg);
+  if (!sug) return `<br>💰 La IA no pudo sugerir un precio para este lote: escribe tu precio de oferta abajo.`;
+  const dcto = ref > sug ? Math.round((1 - sug / ref) * 100) : 0;
+  const actual = parseFloat($("f-precio").value) || 0;
+  const cambio = Math.abs(actual - sug) >= 0.005;
+  return `<br>💰 <b>Precio sugerido: ${money(sug)}/kg</b>${dcto ? ` (${dcto}% menos que el precio normal de ${money(ref)}/kg)` : ""}. Rango razonable: ${money(r.precio_min_kg || sug)} – ${money(r.precio_max_kg || sug)}/kg. ${esc(r.motivo_precio || "")}${cambio ? ` <b>Tú lo cambiaste a ${money(actual)}/kg.</b>` : ""}`;
+}
+
+// Caja de ganancia del compost
+function bloqueExtra(r) {
+  const kg = parseFloat($("f-kg").value) || 0;
+  if (formDestino === "compost") {
+    return `<div class="compost-10">♻️ <b>Tu merma también te paga.</b> Ganarás el <b>10% de la ganancia</b> que genere el compost de este lote:
+      <b class="big">+ ${money(kg * BONO_COMPOST_KG)}</b>
+      <span style="font-size:11.5px;color:var(--gris)">Cálculo: ${kgf(kg)} × S/ ${GANANCIA_COMPOST_KG.toFixed(2)} de ganancia por kg × 10%. Se abona en tu saldo y lo puedes retirar.</span></div>`;
+  }
+  return "";
 }
 
 function actualizarFormulario() {
@@ -625,11 +706,11 @@ function actualizarFormulario() {
     const precio = parseFloat($("f-precio").value) || 0, normal = parseFloat($("f-normal").value) || 0;
     const total = kg * precio, com = total * COMISION;
     const d = normal > precio ? Math.round((1 - precio / normal) * 100) : 0;
-    $("cobro").innerHTML = `Cobras en tu puesto: <strong>${money(total)}</strong>${d ? ` <span class="desc">-${d}%</span>` : ""}<br>Comisión app (solo si se vende): ${money(com)} de tu saldo. Tu saldo actual: ${money(saldo())}.`;
+    $("cobro").innerHTML = `Si se vende, el comprador paga: <strong>${money(total)}</strong>${d ? ` <span class="desc">-${d}%</span>` : ""}<br>Comisión ReCosecha 3% (solo si se vende): - ${money(com)}<br>Recibes en tu saldo para retirar: <b>${money(total - com)}</b>`;
   } else if (formDestino === "donacion") {
     $("cobro").innerHTML = `Recogemos gratis en tu puesto y lo llevamos a una olla común.<br>Aprox. <strong>${Math.round(kg * PLATOS_POR_KG)} platos</strong> · Ahorro SUNAT estimado: ${money(kg * PRECIO_REF_KG * TASA_IR)} (simulado).`;
   } else {
-    $("cobro").innerHTML = `Recogemos gratis tu merma para compost.<br>Ganas <strong>+${money(kg * BONO_COMPOST_KG)}</strong> en tu Saldo App.`;
+    $("cobro").innerHTML = `Recogemos gratis tu merma para compost.<br>Tu 10% de la ganancia del compost: <strong>+${money(kg * BONO_COMPOST_KG)}</strong> en tu saldo.`;
   }
   pintarRecomendacion();
 }
@@ -654,9 +735,7 @@ $("publicar").addEventListener("click", () => {
     let normal = parseFloat($("f-normal").value) || 0;
     if (precio <= 0) { st.seq--; return toast("Ingresa un precio de oferta válido.", "error"); }
     if (normal < precio) normal = precio;
-    const com = kg * precio * COMISION;
-    if (saldo() < com) { st.seq--; return toast(`Tu saldo no cubre la comisión (${money(com)}). Recarga en "Mi Saldo y Premios".`, "error"); }
-    Object.assign(lote, { precio, precioNormal: normal, estado: "disponible" });
+    Object.assign(lote, { precio, precioNormal: normal, estado: "disponible", precioIA: ultimo ? ultimo.precio_sugerido_kg || null : null });
     st.lotes.unshift(lote);
     toast(`✅ ${producto} publicado en el Marketplace. Ya aparece en "Comprar Lotes".`);
   } else if (formDestino === "donacion") {
@@ -667,8 +746,8 @@ $("publicar").addEventListener("click", () => {
     const bono = +(kg * BONO_COMPOST_KG).toFixed(2);
     Object.assign(lote, { estado: "recogido", bono });
     st.lotes.unshift(lote);
-    st.movimientos.unshift({ tipo: "bono", texto: `Bono por tus desechos (${kgf(kg)} de ${producto} recogidos en tu puesto)`, monto: bono, fecha: Date.now() });
-    toast(`🌱 Recojo programado. Ganaste +${money(bono)} en tu saldo.`);
+    st.movimientos.unshift({ tipo: "bono", texto: `Tu 10% de la ganancia del compost (${kgf(kg)} de ${producto} recogidos en tu puesto)`, monto: bono, fecha: Date.now() });
+    toast(`🌱 Recojo programado. Tu 10% del compost: +${money(bono)} en tu saldo.`);
   }
   guardar(); limpiarPublicar(); irA("comerciante", "impacto");
 });
@@ -697,9 +776,9 @@ function badgeLote(l) {
 }
 function detalleLote(l) {
   if (l.estado === "disponible") return `Disponible hasta las 2:00 p. m. • ${money(l.precio)}/kg`;
-  if (l.estado === "vendido") return `✓ Vendido a ${esc(l.comprador)} • ${money(montoLote(l))}`;
+  if (l.estado === "vendido") return `✓ Vendido a ${esc(l.comprador)} • ${money(montoLote(l))} (recibiste ${money(montoLote(l) * (1 - COMISION))})`;
   if (l.estado === "donado") return `✓ Recogido gratis y entregado a ${esc(l.olla)}${l.tras2pm ? " (no se vendió antes de las 2:00 p. m.)" : ""}`;
-  return `🌱 Recogido gratis en puesto • Ganaste +${money(l.bono)} en tu Saldo App`;
+  return `🌱 Recogido gratis en puesto • Tu 10% del compost: +${money(l.bono)}`;
 }
 function renderImpacto() {
   const i = impacto();
@@ -730,8 +809,8 @@ $("ver-constancia").addEventListener("click", () => {
 
 $("csv").addEventListener("click", () => {
   const nom = { disponible: "En Marketplace", vendido: "Vendido", donado: "Donado", recogido: "Compost" };
-  const filas = [["ID", "Fecha", "Producto", "Kg", "Estado", "Precio oferta (S/ kg)", "Monto venta (S/)", "Receptor / Comprador", "Bono (S/)", "Confianza IA"]];
-  mios().forEach((l) => filas.push([l.id, new Date(l.fecha).toLocaleString("es-PE"), l.producto, l.kg, nom[l.estado], l.precio ? l.precio.toFixed(2) : "", l.estado === "vendido" ? montoLote(l).toFixed(2) : "", l.comprador || l.olla || "", l.bono ? l.bono.toFixed(2) : "", l.confianza || ""]));
+  const filas = [["ID", "Fecha", "Producto", "Kg", "Estado", "Precio sugerido IA (S/ kg)", "Precio oferta (S/ kg)", "Monto venta (S/)", "Neto tras 3% (S/)", "Receptor / Comprador", "10% compost (S/)", "Confianza IA"]];
+  mios().forEach((l) => filas.push([l.id, new Date(l.fecha).toLocaleString("es-PE"), l.producto, l.kg, nom[l.estado], l.precioIA ? Number(l.precioIA).toFixed(2) : "", l.precio ? l.precio.toFixed(2) : "", l.estado === "vendido" ? montoLote(l).toFixed(2) : "", l.estado === "vendido" ? (montoLote(l) * (1 - COMISION)).toFixed(2) : "", l.comprador || l.olla || "", l.bono ? l.bono.toFixed(2) : "", l.confianza || ""]));
   const csv = "﻿" + filas.map((f) => f.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
@@ -739,29 +818,154 @@ $("csv").addEventListener("click", () => {
 });
 
 /* ================== MI SALDO Y PREMIOS ================== */
+const ICONO_MOV = { venta: "💰", comision: "🛒", bono: "🌱", retiro: "🏦" };
+const sumaTipo = (t) => st.movimientos.filter((m) => m.tipo === t).reduce((a, m) => a + m.monto, 0);
+const ICONO_CUENTA = { banco: "🏦", yape: "Y", plin: "P", tarjeta: "💳" };
+const PLAZO = { banco: "hasta 24 horas hábiles (transferencia interbancaria)", yape: "al instante", plin: "al instante", tarjeta: "de 1 a 2 días hábiles" };
+
 function renderSaldo() {
   $("saldo-grande").textContent = money(saldo());
+  $("r-ventas-netas").textContent = money(sumaTipo("venta") + sumaTipo("comision"));
+  $("r-compost").textContent = money(sumaTipo("bono"));
+  $("r-retirado").textContent = money(Math.abs(sumaTipo("retiro")));
+  $("n-cuentas").textContent = st.cuentas.length + (st.cuentas.length === 1 ? " cuenta" : " cuentas");
+  $("cuentas").innerHTML = st.cuentas.length ? st.cuentas.map((c) => `<div class="cuenta">
+      <div class="ico ico-${c.tipo}">${ICONO_CUENTA[c.tipo]}</div>
+      <div class="info"><b>${esc(c.nombre)}</b><small>${esc(c.detalle)}</small><small>Titular: ${esc(c.titular)}</small></div>
+      <button class="borrar" data-borrar="${esc(c.id)}" title="Eliminar">🗑</button></div>`).join("")
+    : `<div class="vacio">Aún no has hecho retiros. Tus métodos aparecerán aquí.</div>`;
   $("movimientos").innerHTML = st.movimientos.length ? st.movimientos.map((m) => {
-    const ic = m.tipo === "bono" ? "🌱" : m.tipo === "comision" ? "🛒" : "💳";
-    return `<div class="mov"><div><b>${ic} ${esc(m.texto)}</b><small>${fmtFecha(m.fecha)}</small></div><div class="m ${m.monto >= 0 ? "pos" : "neg"}">${m.monto >= 0 ? "+ " : "- "}${money(Math.abs(m.monto))}</div></div>`;
+    return `<div class="mov"><div><b>${ICONO_MOV[m.tipo] || "💳"} ${esc(m.texto)}</b><small>${fmtFecha(m.fecha)}</small></div><div class="m ${m.monto >= 0 ? "pos" : "neg"}">${m.monto >= 0 ? "+ " : "- "}${money(Math.abs(m.monto))}</div></div>`;
   }).join("") : `<div class="vacio">Sin movimientos.</div>`;
 }
-let montoRecarga = 10;
-$("recargar").addEventListener("click", () => {
-  montoRecarga = 10;
-  abrirModal(`<h3>💳 Recargar Saldo App</h3><p>Elige el monto (mínimo S/ 10.00). Es una simulación: no se realiza ningún pago real.</p>
-    <div class="montos" id="montos"><button class="activo" data-m="10">S/ 10</button><button data-m="20">S/ 20</button><button data-m="50">S/ 50</button></div>
-    <div class="fila-btn"><button class="btn btn-yape" data-pago="Yape">Pagar con Yape</button><button class="btn btn-plin" data-pago="Plin">Pagar con Plin</button></div>
-    <div class="fila-btn"><button class="btn btn-gris" data-cerrar>Cancelar</button></div>`);
+
+/* ---- Agregar cuenta de retiro ---- */
+const soloDigitos = (v) => String(v || "").replace(/\D/g, "");
+const ultimos4 = (v) => soloDigitos(v).slice(-4);
+function luhn(num) { // valida el número de tarjeta
+  let s = 0, dbl = false;
+  for (let i = num.length - 1; i >= 0; i--) { let d = +num[i]; if (dbl) { d *= 2; if (d > 9) d -= 9; } s += d; dbl = !dbl; }
+  return s % 10 === 0;
+}
+function marcaTarjeta(n) { return /^4/.test(n) ? "Visa" : /^(5[1-5]|2[2-7])/.test(n) ? "Mastercard" : /^3[47]/.test(n) ? "American Express" : /^3(0|6|8)/.test(n) ? "Diners Club" : "Tarjeta"; }
+
+function formCuenta(tipo) {
+  const s = +saldo().toFixed(2);
+  const previo = document.getElementById("c-monto"); // conserva el monto al cambiar de pestaña
+  const monto = previo ? previo.value : s.toFixed(2);
+  const campos = {
+    banco: `<label>Banco o caja</label><select id="c-banco">${BANCOS.map((b) => `<option>${b}</option>`).join("")}</select>
+      <div class="fila"><div><label>Tipo de cuenta</label><select id="c-tipocta"><option>Ahorros</option><option>Corriente</option></select></div>
+      <div><label>Moneda</label><select id="c-moneda"><option>Soles</option><option>Dólares</option></select></div></div>
+      <label>Número de cuenta</label><input type="text" id="c-numero" inputmode="numeric" placeholder="Ej. 191-12345678-0-12">
+      <label>CCI (20 dígitos, para otros bancos)</label><input type="text" id="c-cci" inputmode="numeric" placeholder="Ej. 00219100123456780123">`,
+    yape: `<label>Celular afiliado a Yape</label><input type="text" id="c-cel" inputmode="numeric" maxlength="11" placeholder="9XX XXX XXX">`,
+    plin: `<label>Celular afiliado a Plin</label><input type="text" id="c-cel" inputmode="numeric" maxlength="11" placeholder="9XX XXX XXX">`,
+    tarjeta: `<label>Número de tarjeta (débito o crédito)</label><input type="text" id="c-tarjeta" inputmode="numeric" maxlength="23" placeholder="XXXX XXXX XXXX XXXX">
+      <div class="fila"><div><label>Vence (MM/AA)</label><input type="text" id="c-vence" maxlength="5" placeholder="08/29"></div><div></div></div>`,
+  };
+  abrirModal(`<h3>🏦 Retirar mi dinero</h3>
+    <p>Saldo disponible: <b style="color:var(--v800)">${money(s)}</b> (ya tiene descontado el 3% de cada venta). Elige cómo quieres recibirlo:</p>
+    <div class="tipos" id="tipos">
+      ${[["banco", "🏦 Banco"], ["yape", "Yape"], ["plin", "Plin"], ["tarjeta", "💳 Tarjeta"]].map(([k, t]) => `<button data-tipo="${k}" class="${k === tipo ? "activo" : ""}">${t}</button>`).join("")}
+    </div>
+    ${campos[tipo]}
+    <label>Nombre del titular</label><input type="text" id="c-titular" value="${esc(YO.nombre)}">
+    <label>Monto a retirar (mínimo ${money(RETIRO_MIN)})</label>
+    <div class="fila"><div><input type="number" id="c-monto" min="${RETIRO_MIN}" max="${s}" step="0.01" value="${esc(monto)}"></div>
+    <div style="flex:0 0 auto"><button class="btn btn-sec" data-todo-cuenta="${s}">Todo</button></div></div>
+    <div class="err-form" id="err-cuenta"></div>
+    <div class="seguro">🔒 Simulación: no se mueve dinero real. Solo guardamos los últimos 4 dígitos para tu próximo retiro; nunca pedimos claves, CVV ni tokens.</div>
+    <div class="fila-btn"><button class="btn btn-gris" data-cerrar>Cancelar</button><button class="btn btn-pri" style="margin:0" data-guardar-cuenta="${tipo}">Retirar</button></div>`);
+}
+
+function guardarCuenta(tipo) {
+  const err = (m) => ($("err-cuenta").textContent = m);
+  const titular = $("c-titular").value.trim();
+  if (titular.length < 3) return err("Escribe el nombre del titular.");
+  const s = +saldo().toFixed(2), monto = Math.round((parseFloat($("c-monto").value) || 0) * 100) / 100;
+  if (monto < RETIRO_MIN) return err(`El retiro mínimo es ${money(RETIRO_MIN)}.`);
+  if (monto > s) return err(`No puedes retirar más de tu saldo (${money(s)}).`);
+  let c;
+  if (tipo === "banco") {
+    const num = soloDigitos($("c-numero").value), cci = soloDigitos($("c-cci").value);
+    if (num.length < 10 || num.length > 20) return err("El número de cuenta debe tener entre 10 y 20 dígitos.");
+    if (cci && cci.length !== 20) return err("El CCI debe tener exactamente 20 dígitos.");
+    c = { nombre: `${$("c-banco").value} • ${$("c-tipocta").value} ${$("c-moneda").value}`, detalle: `Cuenta •••• ${ultimos4(num)}${cci ? ` · CCI •••• ${ultimos4(cci)}` : ""}` };
+  } else if (tipo === "yape" || tipo === "plin") {
+    const cel = soloDigitos($("c-cel").value);
+    if (!/^9\d{8}$/.test(cel)) return err("El celular debe tener 9 dígitos y empezar con 9.");
+    c = { nombre: tipo === "yape" ? "Yape" : "Plin", detalle: `Celular ••• ••• ${cel.slice(-3)}` };
+  } else {
+    const n = soloDigitos($("c-tarjeta").value), v = $("c-vence").value.trim();
+    if (n.length < 14 || n.length > 19 || !luhn(n)) return err("El número de tarjeta no es válido.");
+    const mv = v.match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+    if (!mv) return err("Escribe la fecha de vencimiento como MM/AA.");
+    const hoy = new Date(), anio = 2000 + +mv[2], mes = +mv[1];
+    if (anio < hoy.getFullYear() || (anio === hoy.getFullYear() && mes < hoy.getMonth() + 1)) return err("La tarjeta está vencida.");
+    c = { nombre: marcaTarjeta(n), detalle: `Tarjeta •••• ${ultimos4(n)} · vence ${v}` };
+  }
+  // Guarda el método (sin repetir) para el próximo retiro y hace el retiro
+  if (!st.cuentas.some((x) => x.tipo === tipo && x.detalle === c.detalle)) st.cuentas.push({ id: "C" + Date.now(), tipo, titular, ...c });
+  st.movimientos.unshift({ tipo: "retiro", texto: `Retiro a ${c.nombre} (${c.detalle.split(" · ")[0]})`, monto: -monto, fecha: Date.now() });
+  guardar(); cerrarModal(); renderTodo();
+  toast(`✅ Retiro de ${money(monto)} a ${c.nombre}. Llega ${PLAZO[tipo]}.`);
+}
+function abrirRetiroNuevo() {
+  const s = +saldo().toFixed(2);
+  if (s < RETIRO_MIN) return toast(`Necesitas al menos ${money(RETIRO_MIN)} para retirar. Tu saldo es ${money(s)}.`, "error");
+  formCuenta("banco");
+}
+$("agregar-cuenta").addEventListener("click", abrirRetiroNuevo);
+$("cuentas").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-borrar]"); if (!b) return;
+  st.cuentas = st.cuentas.filter((c) => c.id !== b.dataset.borrar);
+  guardar(); renderTodo(); toast("Cuenta eliminada.");
+});
+
+/* ---- Retirar dinero ---- */
+let cuentaRetiro = null;
+$("retirar").addEventListener("click", () => {
+  const s = +saldo().toFixed(2);
+  if (s < RETIRO_MIN) return toast(`Necesitas al menos ${money(RETIRO_MIN)} para retirar. Tu saldo es ${money(s)}.`, "error");
+  if (!st.cuentas.length) return formCuenta("banco");
+  cuentaRetiro = st.cuentas[0].id;
+  abrirModal(`<h3>🏦 Retirar mi dinero</h3>
+    <p>Saldo disponible: <b style="color:var(--v800)">${money(s)}</b> (ya tiene descontado el 3% de cada venta).</p>
+    <label>¿A dónde lo enviamos?</label>
+    <div id="elegir-cuenta">${st.cuentas.map((c, i) => `<label class="elegir ${i === 0 ? "activo" : ""}"><input type="radio" name="cta" value="${esc(c.id)}" ${i === 0 ? "checked" : ""}><span><b>${esc(c.nombre)}</b><br><small style="color:var(--gris)">${esc(c.detalle)}</small></span></label>`).join("")}</div>
+    <button class="btn btn-borde" style="margin-top:8px" data-otro-metodo>+ Usar otro banco, Yape/Plin o tarjeta</button>
+    <label>Monto a retirar (mínimo ${money(RETIRO_MIN)})</label>
+    <div class="fila"><div><input type="number" id="monto-retiro" min="${RETIRO_MIN}" max="${s}" step="0.01" value="${s.toFixed(2)}"></div>
+    <div style="flex:0 0 auto"><button class="btn btn-sec" data-todo="${s}">Todo</button></div></div>
+    <div class="err-form" id="err-retiro"></div>
+    <p style="font-size:11.5px">Simulación: no se mueve dinero real. ReCosecha no cobra comisión por retirar.</p>
+    <div class="fila-btn"><button class="btn btn-gris" data-cerrar>Cancelar</button><button class="btn btn-pri" style="margin:0" data-confirmar-retiro>Confirmar retiro</button></div>`);
+});
+function confirmarRetiro() {
+  const s = +saldo().toFixed(2), monto = Math.round((parseFloat($("monto-retiro").value) || 0) * 100) / 100;
+  const err = (m) => ($("err-retiro").textContent = m);
+  if (monto < RETIRO_MIN) return err(`El retiro mínimo es ${money(RETIRO_MIN)}.`);
+  if (monto > s) return err(`No puedes retirar más de tu saldo (${money(s)}).`);
+  const c = st.cuentas.find((x) => x.id === cuentaRetiro); if (!c) return err("Elige una cuenta.");
+  st.movimientos.unshift({ tipo: "retiro", texto: `Retiro a ${c.nombre} (${c.detalle.split(" · ")[0]})`, monto: -monto, fecha: Date.now() });
+  guardar(); cerrarModal(); renderTodo();
+  toast(`✅ Retiro de ${money(monto)} a ${c.nombre}. Llega ${PLAZO[c.tipo]}.`);
+}
+
+$("hoja").addEventListener("change", (e) => {
+  if (e.target.name === "cta") {
+    cuentaRetiro = e.target.value;
+    document.querySelectorAll("#elegir-cuenta .elegir").forEach((l) => l.classList.toggle("activo", l.contains(e.target)));
+  }
 });
 $("hoja").addEventListener("click", (e) => {
-  const m = e.target.closest("[data-m]");
-  if (m) { montoRecarga = +m.dataset.m; document.querySelectorAll("#montos button").forEach((b) => b.classList.toggle("activo", b === m)); }
-  const p = e.target.closest("[data-pago]");
-  if (p) {
-    st.movimientos.unshift({ tipo: "recarga", texto: `Recarga de Saldo Prepagado (${p.dataset.pago})`, monto: montoRecarga, fecha: Date.now() });
-    guardar(); cerrarModal(); renderTodo(); toast(`✅ Recargaste ${money(montoRecarga)} con ${p.dataset.pago}.`);
-  }
+  const t = e.target.closest("[data-tipo]"); if (t) return formCuenta(t.dataset.tipo);
+  const g = e.target.closest("[data-guardar-cuenta]"); if (g) return guardarCuenta(g.dataset.guardarCuenta);
+  const todo = e.target.closest("[data-todo]"); if (todo) { $("monto-retiro").value = (+todo.dataset.todo).toFixed(2); return; }
+  const todoC = e.target.closest("[data-todo-cuenta]"); if (todoC) { $("c-monto").value = (+todoC.dataset.todoCuenta).toFixed(2); return; }
+  if (e.target.closest("[data-otro-metodo]")) return formCuenta("banco");
+  if (e.target.closest("[data-confirmar-retiro]")) return confirmarRetiro();
   const c = e.target.closest("[data-comprar]");
   if (c) confirmarCompra(c.dataset.comprar);
   if (e.target.closest("[data-reset]")) { st = semilla(); guardar(); cerrarModal(); limpiarPublicar(); irA("comerciante", "publicar"); toast("Datos de demostración reiniciados."); }
@@ -797,16 +1001,18 @@ $("ofertas").addEventListener("click", (e) => {
   const l = st.lotes.find((x) => x.id === b.dataset.lote); if (!l) return;
   abrirModal(`<h3>🛒 Comprar lote</h3>
     <div class="lote"><div class="em">${emoji(l.producto)}</div><div class="info"><b>${esc(l.producto)} (${kgf(l.kg)})</b><small>${esc(l.puesto)} (${esc(l.vendedor)}) • ${money(l.precio)}/kg</small></div></div>
-    <p>Total a pagar: <b style="color:var(--v800);font-size:18px">${money(montoLote(l))}</b><br>Pagas directo al comerciante al recoger en su puesto antes de las 2:00 p. m.</p>
-    <div class="fila-btn"><button class="btn btn-gris" data-cerrar>Cancelar</button><button class="btn btn-pri" style="margin:0" data-comprar="${esc(l.id)}">Confirmar compra</button></div>`);
+    <p>Total a pagar: <b style="color:var(--v800);font-size:18px">${money(montoLote(l))}</b><br>Pagas en la app con Yape o Plin y recoges el lote en el puesto antes de las 2:00 p. m. ReCosecha le abona el dinero al comerciante (simulación).</p>
+    <div class="fila-btn"><button class="btn btn-yape" data-comprar="${esc(l.id)}" data-medio="Yape">Pagar con Yape</button><button class="btn btn-plin" data-comprar="${esc(l.id)}" data-medio="Plin">Pagar con Plin</button></div>
+    <div class="fila-btn"><button class="btn btn-gris" data-cerrar>Cancelar</button></div>`);
 });
 function confirmarCompra(id) {
   const l = st.lotes.find((x) => x.id === id);
   if (!l || l.estado !== "disponible") { cerrarModal(); return toast("Este lote ya no está disponible.", "error"); }
   l.estado = "vendido"; l.comprador = COMPRADOR; l.fechaVenta = Date.now();
   if (l.propio) {
-    const com = +(montoLote(l) * COMISION).toFixed(2);
-    st.movimientos.unshift({ tipo: "comision", texto: `Comisión 3% por venta de ${l.producto} en Marketplace (${money(montoLote(l))})`, monto: -com, fecha: Date.now() });
+    const total = +montoLote(l).toFixed(2), com = +(total * COMISION).toFixed(2);
+    st.movimientos.unshift({ tipo: "venta", texto: `Venta de ${l.producto} (${kgf(l.kg)}) a ${COMPRADOR}`, monto: total, fecha: Date.now() });
+    st.movimientos.unshift({ tipo: "comision", texto: `Comisión 3% de ReCosecha por la venta de ${l.producto}`, monto: -com, fecha: Date.now() });
   }
   guardar(); cerrarModal(); renderTodo();
   toast(`✅ Compraste ${l.producto} (${kgf(l.kg)}). Recógelo en ${l.puesto}.`);
@@ -847,4 +1053,3 @@ function renderTodo() {
 irA("comerciante", "publicar");
 </script>
 </body>
-</html>
