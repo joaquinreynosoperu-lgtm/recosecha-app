@@ -1,0 +1,6 @@
+{
+  "name": "recosecha-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ReCosecha: analiza una foto de fruta o verdura y sugiere venta, donación o compost"
+}

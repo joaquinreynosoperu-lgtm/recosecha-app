@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReCosecha — Alimentos que siguen contando historias</title>
+<style>
+  :root {
+    --verde: #1f7a4d; --verde-osc: #145a38; --verde-cl: #e6f4ec;
+    --ambar: #b7791f; --ambar-cl: #fdf3dc;
+    --rojo: #8a4b2a; --rojo-cl: #f6e8df;
+    --tinta: #1d2b24; --gris: #6b7a72; --borde: #dbe5df; --fondo: #f3f6f4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--fondo); color: var(--tinta); }
+  .app { max-width: 460px; margin: 0 auto; min-height: 100vh; background: #fff; box-shadow: 0 0 40px rgba(0,0,0,.08); padding-bottom: 80px; }
+  header { background: var(--verde); color: #fff; padding: 20px 18px 16px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: .9; }
+  .saldo { margin-top: 12px; display: inline-block; background: rgba(255,255,255,.18); border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+  section { padding: 18px; }
+  h2 { font-size: 17px; margin: 0 0 6px; }
+  .nota { font-size: 13px; color: var(--gris); margin: 0 0 12px; }
+  .zona-foto { border: 2px dashed var(--borde); border-radius: 14px; padding: 14px; text-align: center; background: #fafcfb; }
+  .zona-foto img { max-width: 100%; max-height: 260px; border-radius: 10px; display: none; margin: 0 auto 10px; }
+  .btn { display: inline-block; border: 0; border-radius: 10px; padding: 12px 16px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .btn-sec { background: var(--verde-cl); color: var(--verde-osc); }
+  .btn-pri { background: var(--verde); color: #fff; width: 100%; margin-top: 12px; }
+  .btn-pri:disabled { background: #9fb8aa; cursor: not-allowed; }
+  input[type=file] { display: none; }
+  .cargando { display: none; text-align: center; padding: 18px; color: var(--gris); font-size: 14px; }
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--borde); border-top-color: var(--verde); border-radius: 50%; animation: gira 0.8s linear infinite; margin: 0 auto 8px; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  .resultado { display: none; border-radius: 14px; padding: 14px; margin-top: 14px; border: 1px solid var(--borde); }
+  .resultado.venta { background: var(--verde-cl); border-color: #b9dfc9; }
+  .resultado.donacion { background: var(--ambar-cl); border-color: #ecd49a; }
+  .resultado.compost { background: var(--rojo-cl); border-color: #e2c3b0; }
+  .etiqueta { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .resultado h3 { margin: 4px 0 6px; font-size: 19px; }
+  .resultado p { margin: 4px 0; font-size: 14px; line-height: 1.4; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .chip { background: rgba(255,255,255,.7); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; }
+  .aviso { background: #fff; border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-top: 8px; }
+  .error { display: none; background: #fdecea; color: #8a1f17; border-radius: 10px; padding: 12px; font-size: 14px; margin-top: 12px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+  input[type=text], input[type=number], select { width: 100%; padding: 11px; border: 1px solid var(--borde); border-radius: 10px; font-size: 15px; background: #fff; }
+  .fila { display: flex; gap: 10px; }
+  .fila > div { flex: 1; }
+  .cobro { background: var(--verde-cl); border-radius: 12px; padding: 12px; margin-top: 14px; font-size: 14px; }
+  .cobro strong { font-size: 20px; color: var(--verde-osc); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: #fafcfb; border: 1px solid var(--borde); border-radius: 12px; padding: 12px; }
+  .stat b { display: block; font-size: 20px; color: var(--verde-osc); }
+  .stat span { font-size: 12px; color: var(--gris); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+  th, td { padding: 7px 5px; border-bottom: 1px solid var(--borde); text-align: left; }
+  th { color: var(--gris); font-weight: 600; }
+  .vacio { color: var(--gris); font-size: 13px; padding: 10px 0; }
+  .descarga { margin-top: 10px; background: #fff; border: 1px solid var(--verde); color: var(--verde-osc); width: 100%; }
+  footer { text-align: center; font-size: 12px; color: var(--gris); padding: 0 18px 18px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>ReCosecha Santa Anita</h1>
+    <p>Alimentos que siguen contando historias</p>
+    <div class="saldo">Mi saldo: S/ <span id="saldo">10.00</span></div>
+  </header>
+
+  <section>
+    <h2>📷 Publicar lote con 1 foto</h2>
+    <p class="nota">Toma o sube una foto del producto. La IA identifica qué es, evalúa cómo se ve y sugiere si venderlo, donarlo o llevarlo a compost.</p>
+
+    <div class="zona-foto">
+      <img id="vista" alt="Vista previa de la foto">
+      <label class="btn btn-sec" for="archivo" style="margin:0">📂 Tomar o subir foto</label>
+      <input type="file" id="archivo" accept="image/*">
+    </div>
+    <button class="btn btn-pri" id="analizar" disabled>🔍 Analizar con IA</button>
+
+    <div class="cargando" id="cargando"><div class="spinner"></div>Analizando la foto…</div>
+    <div class="error" id="error"></div>
+
+    <div class="resultado" id="resultado">
+      <div class="etiqueta" id="r-etiqueta"></div>
+      <h3 id="r-producto"></h3>
+      <div class="chips">
+        <span class="chip" id="r-dias"></span>
+        <span class="chip" id="r-conf"></span>
+      </div>
+      <p id="r-estado"></p>
+      <p id="r-motivo"></p>
+      <div class="aviso" id="r-precaucion"></div>
+    </div>
+  </section>
+
+  <section id="formulario" style="display:none; padding-top:0">
+    <h2>Datos del lote</h2>
+    <p class="nota">Se autocompletó con el análisis. Revísalo y corrige lo que haga falta.</p>
+    <label>Producto</label>
+    <input type="text" id="f-producto">
+    <div class="fila">
+      <div><label>Peso (kg)</label><input type="number" id="f-kg" value="10" min="0" step="0.1"></div>
+      <div><label>Precio por kg (S/)</label><input type="number" id="f-precio" value="2.00" min="0" step="0.1"></div>
+    </div>
+    <label>Destino del lote</label>
+    <select id="f-destino">
+      <option value="venta">🟢 Venta en Marketplace</option>
+      <option value="donacion">🟡 Donación a Olla Común</option>
+      <option value="compost">🌱 Compost / Valorización</option>
+    </select>
+    <div class="cobro" id="cobro"></div>
+    <button class="btn btn-pri" id="publicar">🚀 Publicar lote ahora</button>
+  </section>
+
+  <section>
+    <h2>📊 Mi impacto</h2>
+    <div class="stats">
+      <div class="stat"><b id="s-ventas">S/ 0.00</b><span>Recuperados en ventas</span></div>
+      <div class="stat"><b id="s-don">0 kg</b><span>Donados a ollas comunes</span></div>
+      <div class="stat"><b id="s-platos">0</b><span>Platos servidos (aprox.)</span></div>
+      <div class="stat"><b id="s-comp">0 kg</b><span>A compost</span></div>
+    </div>
+    <h2 style="margin-top:20px">Mis lotes</h2>
+    <div id="tabla-wrap"><div class="vacio">Aún no has publicado lotes.</div></div>
+    <button class="btn descarga" id="csv" style="display:none">⬇ Descargar Excel (.CSV)</button>
+  </section>
+
+  <footer>Prototipo universitario. La sugerencia de la IA es una ayuda: confirma siempre el estado del producto antes de vender o donar.</footer>
+</div>
+
+<script>
+const COMISION = 0.03;
+const PLATOS_POR_KG = 4; // supuesto del prototipo
+let imagenBase64 = null;
+let ultimo = null;
+let saldo = 10.0;
+const lotes = [];
+
+const $ = (id) => document.getElementById(id);
+const nombres = { venta: "Venta en Marketplace", donacion: "Donación a Olla Común", compost: "Compost / Valorización" };
+const etiquetas = { venta: "🟢 Sugerencia: vender", donacion: "🟡 Sugerencia: donar", compost: "🌱 Sugerencia: compost" };
+
+// Reduce la foto para que el envío sea rápido y liviano
+function reducirImagen(file, maxLado = 1024, calidad = 0.82) {
+  return new Promise((resolve, reject) => {
+    const lector = new FileReader();
+    lector.onerror = () => reject(new Error("No se pudo leer la imagen"));
+    lector.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Formato de imagen no compatible"));
+      img.onload = () => {
+        const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * escala);
+        c.height = Math.round(img.height * escala);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL("image/jpeg", calidad));
+      };
+      img.src = lector.result;
+    };
+    lector.readAsDataURL(file);
+  });
+}
+
+$("archivo").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  $("error").style.display = "none";
+  $("resultado").style.display = "none";
+  try {
+    imagenBase64 = await reducirImagen(file);
+    $("vista").src = imagenBase64;
+    $("vista").style.display = "block";
+    $("analizar").disabled = false;
+  } catch (err) {
+    mostrarError(err.message);
+  }
+});
+
+function mostrarError(msg) {
+  $("error").textContent = msg;
+  $("error").style.display = "block";
+}
+
+$("analizar").addEventListener("click", async () => {
+  if (!imagenBase64) return;
+  $("error").style.display = "none";
+  $("resultado").style.display = "none";
+  $("cargando").style.display = "block";
+  $("analizar").disabled = true;
+  try {
+    const resp = await fetch("/api/analizar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imagen: imagenBase64 }),
+    });
+    const datos = await resp.json();
+    if (!resp.ok) throw new Error(datos.error || "No se pudo analizar la foto");
+    ultimo = datos.resultado;
+    pintarResultado(ultimo);
+  } catch (err) {
+    mostrarError(err.message);
+  } finally {
+    $("cargando").style.display = "none";
+    $("analizar").disabled = false;
+  }
+});
+
+function pintarResultado(r) {
+  const destino = ["venta", "donacion", "compost"].includes(r.destino) ? r.destino : "compost";
+  const caja = $("resultado");
+  caja.className = "resultado " + destino;
+  caja.style.display = "block";
+  $("r-etiqueta").textContent = etiquetas[destino];
+  $("r-producto").textContent = r.es_alimento === false ? "No parece un alimento" : (r.producto || "Producto");
+  $("r-dias").textContent = "⏳ Días útiles: " + (r.dias_utiles ?? "?");
+  $("r-conf").textContent = "Confianza: " + (r.confianza || "?");
+  $("r-estado").textContent = r.estado_visible || "";
+  $("r-motivo").textContent = r.motivo || "";
+  $("r-precaucion").textContent = "✋ " + (r.precaucion || "Verifica el producto en persona antes de decidir.");
+
+  if (r.es_alimento !== false && r.confianza !== "baja") {
+    $("formulario").style.display = "block";
+    $("f-producto").value = r.producto || "";
+    $("f-destino").value = destino;
+    actualizarCobro();
+  } else {
+    $("formulario").style.display = "none";
+  }
+}
+
+function actualizarCobro() {
+  const kg = parseFloat($("f-kg").value) || 0;
+  const precio = parseFloat($("f-precio").value) || 0;
+  const destino = $("f-destino").value;
+  if (destino === "venta") {
+    const total = kg * precio;
+    const com = total * COMISION;
+    $("cobro").innerHTML = `Cobras en tu puesto: <strong>S/ ${total.toFixed(2)}</strong><br>Comisión app (solo si vendes): S/ ${com.toFixed(2)} de tu saldo`;
+  } else if (destino === "donacion") {
+    $("cobro").innerHTML = `Recogemos gratis en tu puesto y lo llevamos a una olla común.<br>Aprox. <strong>${Math.round(kg * PLATOS_POR_KG)} platos</strong>.`;
+  } else {
+    $("cobro").innerHTML = `Recogemos gratis tu merma para compost.<br>Sin costo para ti.`;
+  }
+}
+["f-kg", "f-precio", "f-destino"].forEach((id) => $(id).addEventListener("input", actualizarCobro));
+
+$("publicar").addEventListener("click", () => {
+  const kg = parseFloat($("f-kg").value) || 0;
+  const precio = parseFloat($("f-precio").value) || 0;
+  const destino = $("f-destino").value;
+  if (kg <= 0) return alert("Ingresa un peso válido.");
+  const monto = destino === "venta" ? kg * precio : 0;
+  if (destino === "venta") {
+    const com = monto * COMISION;
+    if (saldo < com) return alert("Saldo insuficiente para la comisión. Recarga tu saldo.");
+    saldo -= com;
+    $("saldo").textContent = saldo.toFixed(2);
+  }
+  lotes.push({
+    id: "L" + String(lotes.length + 1).padStart(3, "0"),
+    producto: $("f-producto").value || "Producto",
+    kg, destino, monto,
+    confianza: ultimo ? ultimo.confianza : "",
+  });
+  render();
+  $("formulario").style.display = "none";
+  $("resultado").style.display = "none";
+  $("vista").style.display = "none";
+  $("archivo").value = "";
+  imagenBase64 = null;
+  $("analizar").disabled = true;
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+});
+
+function render() {
+  const ventas = lotes.filter((l) => l.destino === "venta").reduce((a, l) => a + l.monto, 0);
+  const don = lotes.filter((l) => l.destino === "donacion").reduce((a, l) => a + l.kg, 0);
+  const comp = lotes.filter((l) => l.destino === "compost").reduce((a, l) => a + l.kg, 0);
+  $("s-ventas").textContent = "S/ " + ventas.toFixed(2);
+  $("s-don").textContent = don.toFixed(1) + " kg";
+  $("s-platos").textContent = Math.round(don * PLATOS_POR_KG);
+  $("s-comp").textContent = comp.toFixed(1) + " kg";
+  if (!lotes.length) return;
+  let html = "<table><tr><th>ID</th><th>Producto</th><th>Kg</th><th>Destino</th><th>Monto</th></tr>";
+  lotes.forEach((l) => {
+    html += `<tr><td>${l.id}</td><td>${esc(l.producto)}</td><td>${l.kg}</td><td>${nombres[l.destino]}</td><td>S/ ${l.monto.toFixed(2)}</td></tr>`;
+  });
+  html += "</table>";
+  $("tabla-wrap").innerHTML = html;
+  $("csv").style.display = "block";
+}
+
+function esc(t) {
+  return String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+$("csv").addEventListener("click", () => {
+  const filas = [["ID", "Producto", "Kg", "Destino", "Monto (S/)", "Confianza IA"]];
+  lotes.forEach((l) => filas.push([l.id, l.producto, l.kg, nombres[l.destino], l.monto.toFixed(2), l.confianza]));
+  const csv = "﻿" + filas.map((f) => f.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "recosecha_lotes.csv";
+  a.click();
+});
+</script>
+</body>
+</html>
